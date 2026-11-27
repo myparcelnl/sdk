@@ -335,6 +335,10 @@ class OrderToCreate implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['ordered_at'] === null) {
             $invalidProperties[] = "'ordered_at' can't be null";
         }
+        if (!is_null($this->container['ordered_at']) && !preg_match("/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/", $this->container['ordered_at'])) {
+            $invalidProperties[] = "invalid value for 'ordered_at', must be conform to the pattern /^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/.";
+        }
+
         if ($this->container['shop_id'] === null) {
             $invalidProperties[] = "'shop_id' can't be null";
         }
@@ -489,6 +493,11 @@ class OrderToCreate implements ModelInterface, ArrayAccess, \JsonSerializable
         if (is_null($ordered_at)) {
             throw new \InvalidArgumentException('non-nullable ordered_at cannot be null');
         }
+
+        if ((!preg_match("/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/", ObjectSerializer::toString($ordered_at)))) {
+            throw new \InvalidArgumentException("invalid value for \$ordered_at when calling OrderToCreate., must conform to the pattern /^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/.");
+        }
+
         $this->container['ordered_at'] = $ordered_at;
 
         return $this;

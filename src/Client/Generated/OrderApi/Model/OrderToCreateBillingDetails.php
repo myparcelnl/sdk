@@ -58,8 +58,8 @@ class OrderToCreateBillingDetails implements ModelInterface, ArrayAccess, \JsonS
       * @var string[]
       */
     protected static $openAPITypes = [
-        'address' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderToCreateBillingDetailsAddress',
-        'contact' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderToCreateBillingDetailsContact'
+        'address' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address',
+        'contact' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Contact'
     ];
 
     /**
@@ -300,7 +300,7 @@ class OrderToCreateBillingDetails implements ModelInterface, ArrayAccess, \JsonS
     /**
      * Gets address
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderToCreateBillingDetailsAddress|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address|null
      */
     public function getAddress()
     {
@@ -310,7 +310,7 @@ class OrderToCreateBillingDetails implements ModelInterface, ArrayAccess, \JsonS
     /**
      * Sets address
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderToCreateBillingDetailsAddress|null $address address
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address|null $address The billing address of an order.
      *
      * @return self
      */
@@ -327,7 +327,7 @@ class OrderToCreateBillingDetails implements ModelInterface, ArrayAccess, \JsonS
     /**
      * Gets contact
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderToCreateBillingDetailsContact|null
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Contact|null
      */
     public function getContact()
     {
@@ -337,7 +337,7 @@ class OrderToCreateBillingDetails implements ModelInterface, ArrayAccess, \JsonS
     /**
      * Sets contact
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderToCreateBillingDetailsContact|null $contact contact
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Contact|null $contact The billing contact of an order.
      *
      * @return self
      */

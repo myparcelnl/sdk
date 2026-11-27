@@ -101,6 +101,12 @@ class DefaultApi
         'ordersGet' => [
             'application/json',
         ],
+        'packageGroupsPut' => [
+            'application/json',
+        ],
+        'packagesPut' => [
+            'application/json',
+        ],
         'packingSlipsGet' => [
             'application/json',
         ],
@@ -111,6 +117,9 @@ class DefaultApi
             'application/json',
         ],
         'removeNotesPost' => [
+            'application/json',
+        ],
+        'shipPackagesPost' => [
             'application/json',
         ],
         'unassignFromUserPost' => [
@@ -178,7 +187,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
     public function addNotePost($add_note_post_request_inner, string $contentType = self::contentTypes['addNotePost'][0])
     {
@@ -197,7 +206,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
     public function addNotePostWithHttpInfo($add_note_post_request_inner, string $contentType = self::contentTypes['addNotePost'][0])
     {
@@ -228,11 +237,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -250,7 +259,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -281,6 +290,87 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -296,7 +386,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -329,7 +419,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -338,6 +428,30 @@ class DefaultApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -383,7 +497,7 @@ class DefaultApi
      */
     public function addNotePostAsyncWithHttpInfo($add_note_post_request_inner, string $contentType = self::contentTypes['addNotePost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]';
         $request = $this->addNotePostRequest($add_note_post_request_inner, $contentType);
 
         return $this->client
@@ -473,7 +587,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -543,7 +657,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
     public function addPackagesPost($add_packages, string $contentType = self::contentTypes['addPackagesPost'][0])
     {
@@ -562,7 +676,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
     public function addPackagesPostWithHttpInfo($add_packages, string $contentType = self::contentTypes['addPackagesPost'][0])
     {
@@ -593,11 +707,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -615,7 +729,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -646,6 +760,87 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -661,7 +856,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -694,7 +889,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -703,6 +898,30 @@ class DefaultApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -748,7 +967,7 @@ class DefaultApi
      */
     public function addPackagesPostAsyncWithHttpInfo($add_packages, string $contentType = self::contentTypes['addPackagesPost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AddNotePost200ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]';
         $request = $this->addPackagesPostRequest($add_packages, $contentType);
 
         return $this->client
@@ -838,7 +1057,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -906,7 +1125,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
     public function assignToUserPost($assign_to_user_post_request_inner, string $contentType = self::contentTypes['assignToUserPost'][0])
     {
@@ -923,7 +1142,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
     public function assignToUserPostWithHttpInfo($assign_to_user_post_request_inner, string $contentType = self::contentTypes['assignToUserPost'][0])
     {
@@ -954,11 +1173,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -976,7 +1195,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -1007,6 +1226,87 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -1022,7 +1322,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -1055,7 +1355,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1064,6 +1364,30 @@ class DefaultApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1105,7 +1429,7 @@ class DefaultApi
      */
     public function assignToUserPostAsyncWithHttpInfo($assign_to_user_post_request_inner, string $contentType = self::contentTypes['assignToUserPost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
         $request = $this->assignToUserPostRequest($assign_to_user_post_request_inner, $contentType);
 
         return $this->client
@@ -1195,7 +1519,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -1265,7 +1589,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
     public function cancelPost($cancel_post_request_inner, string $contentType = self::contentTypes['cancelPost'][0])
     {
@@ -1284,7 +1608,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
     public function cancelPostWithHttpInfo($cancel_post_request_inner, string $contentType = self::contentTypes['cancelPost'][0])
     {
@@ -1315,11 +1639,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -1337,7 +1661,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -1368,6 +1692,87 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -1383,7 +1788,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -1416,7 +1821,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1425,6 +1830,30 @@ class DefaultApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1470,7 +1899,7 @@ class DefaultApi
      */
     public function cancelPostAsyncWithHttpInfo($cancel_post_request_inner, string $contentType = self::contentTypes['cancelPost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
         $request = $this->cancelPostRequest($cancel_post_request_inner, $contentType);
 
         return $this->client
@@ -1560,7 +1989,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -1630,7 +2059,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseCreationalBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
     public function createFromShippablePackagesPost($create_order_from_shippable_packages, string $contentType = self::contentTypes['createFromShippablePackagesPost'][0])
     {
@@ -1649,7 +2078,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseCreationalBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
     public function createFromShippablePackagesPostWithHttpInfo($create_order_from_shippable_packages, string $contentType = self::contentTypes['createFromShippablePackagesPost'][0])
     {
@@ -1680,11 +2109,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseCreationalBodyInner[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseCreationalBodyInner[]' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -1702,7 +2131,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseCreationalBodyInner[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -1733,6 +2162,87 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -1748,7 +2258,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseCreationalBodyInner[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -1781,7 +2291,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseCreationalBodyInner[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1790,6 +2300,30 @@ class DefaultApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1835,7 +2369,7 @@ class DefaultApi
      */
     public function createFromShippablePackagesPostAsyncWithHttpInfo($create_order_from_shippable_packages, string $contentType = self::contentTypes['createFromShippablePackagesPost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseCreationalBodyInner[]';
         $request = $this->createFromShippablePackagesPostRequest($create_order_from_shippable_packages, $contentType);
 
         return $this->client
@@ -1925,7 +2459,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -1995,7 +2529,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
     public function createPost($order_to_create, string $contentType = self::contentTypes['createPost'][0])
     {
@@ -2014,7 +2548,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
     public function createPostWithHttpInfo($order_to_create, string $contentType = self::contentTypes['createPost'][0])
     {
@@ -2045,11 +2579,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 202:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -2067,7 +2601,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -2098,6 +2632,87 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -2113,7 +2728,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -2146,7 +2761,7 @@ class DefaultApi
                 case 202:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2155,6 +2770,30 @@ class DefaultApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2200,7 +2839,7 @@ class DefaultApi
      */
     public function createPostAsyncWithHttpInfo($order_to_create, string $contentType = self::contentTypes['createPost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CreatePost202Response';
         $request = $this->createPostRequest($order_to_create, $contentType);
 
         return $this->client
@@ -2290,7 +2929,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -2360,7 +2999,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
     public function editNotePost($edit_note_post_request_inner, string $contentType = self::contentTypes['editNotePost'][0])
     {
@@ -2379,7 +3018,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
     public function editNotePostWithHttpInfo($edit_note_post_request_inner, string $contentType = self::contentTypes['editNotePost'][0])
     {
@@ -2410,11 +3049,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -2432,7 +3071,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -2463,6 +3102,87 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -2478,7 +3198,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -2511,7 +3231,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2520,6 +3240,30 @@ class DefaultApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2565,7 +3309,7 @@ class DefaultApi
      */
     public function editNotePostAsyncWithHttpInfo($edit_note_post_request_inner, string $contentType = self::contentTypes['editNotePost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
         $request = $this->editNotePostRequest($edit_note_post_request_inner, $contentType);
 
         return $this->client
@@ -2655,7 +3399,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -2725,7 +3469,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
     public function evaluateRulesPost($cancel_post_request_inner, string $contentType = self::contentTypes['evaluateRulesPost'][0])
     {
@@ -2744,7 +3488,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
     public function evaluateRulesPostWithHttpInfo($cancel_post_request_inner, string $contentType = self::contentTypes['evaluateRulesPost'][0])
     {
@@ -2775,11 +3519,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -2797,7 +3541,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -2828,6 +3572,87 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -2843,7 +3668,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -2876,7 +3701,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2885,6 +3710,30 @@ class DefaultApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2930,7 +3779,7 @@ class DefaultApi
      */
     public function evaluateRulesPostAsyncWithHttpInfo($cancel_post_request_inner, string $contentType = self::contentTypes['evaluateRulesPost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
         $request = $this->evaluateRulesPostRequest($cancel_post_request_inner, $contentType);
 
         return $this->client
@@ -3020,7 +3869,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -3090,7 +3939,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
     public function importPost($cancel_post_request_inner, string $contentType = self::contentTypes['importPost'][0])
     {
@@ -3109,7 +3958,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
     public function importPostWithHttpInfo($cancel_post_request_inner, string $contentType = self::contentTypes['importPost'][0])
     {
@@ -3140,11 +3989,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -3162,7 +4011,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -3193,6 +4042,87 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -3208,7 +4138,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -3241,7 +4171,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3250,6 +4180,30 @@ class DefaultApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3295,7 +4249,7 @@ class DefaultApi
      */
     public function importPostAsyncWithHttpInfo($cancel_post_request_inner, string $contentType = self::contentTypes['importPost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
         $request = $this->importPostRequest($cancel_post_request_inner, $contentType);
 
         return $this->client
@@ -3385,7 +4339,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -3450,17 +4404,17 @@ class DefaultApi
      * Query and/or filter orders.
      *
      * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[]|null $aggregations The statuses to retrieve counts for. (optional)
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter filter (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter Filters on the orders. Examples: - &#x60;filter[assignedUserId]&#x3D;me&#x60; - &#x60;filter[carrier]&#x3D;POST_NL&#x60; - &#x60;filter[hasAssignedUser]&#x3D;true&#x60; - &#x60;filter[hasNotes]&#x3D;true&#x60; - &#x60;filter[orderedAt]&#x3D;gte 2024-02-04T00:00:00Z&#x60; - &#x60;filter[price]&#x3D;lte 10&#x60; - &#x60;filter[shopId]&#x3D;555&#x60; - &#x60;filter[status]&#x3D;OPEN&amp;filter[status]&#x3D;CANCELED&#x60; (optional)
      * @param  int|null $limit The maximum number of orders to retrieve. (optional, default to 50)
      * @param  string|null $page_token The page token to retrieve the next page of orders. (optional)
-     * @param  string|null $query The following operators are supported: &#39;+ signifies AND operation&#39; &#39;| signifies OR operation&#39; &#39;- negates a single token&#39; &#39;\&quot; wraps a number of tokens to signify a phrase for searching&#39; &#39;* at the end of a term signifies a prefix query&#39; &#39;( and ) signify precedence&#39; &#39;~N after a word signifies edit distance (fuzziness)&#39; &#39;~N after a phrase signifies slop amount&#39; To use one of these characters literally, escape it with a preceding backslash (\\). (optional)
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter|null $sort When no &#x60;query&#x60; is provided the default sort is by &#x60;orderedAt&#x60; descending. When a &#x60;query&#x60; is provided the default sort is by relevance. (optional)
+     * @param  string|null $query The following operators are supported: &#39;+ signifies AND operation&#39; &#39;| signifies OR operation&#39; &#39;- negates a single token&#39; &#39;\&quot; wraps a number of tokens to signify a phrase for searching&#39; &#39;* at the end of a term signifies a prefix query&#39; &#39;( and ) signify precedence&#39; &#39;~N after a word signifies edit distance (fuzziness)&#39; &#39;~N after a phrase signifies slop amount&#39; To use one of these characters literally, escape it with a preceding backslash (\\\\). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter|null $sort When no &#x60;query&#x60; is provided the default sort is by &#x60;orderedAt&#x60; descending. When a &#x60;query&#x60; is provided the default sort is by relevance. Examples: - &#x60;sort[orderedAt]&#x3D;ASC&#x60; - &#x60;sort[customerReference]&#x3D;ASC&amp;sort[orderedAt]&#x3D;DESC&amp;sort[price]&#x3D;ASC&amp;sort[sourceId]&#x3D;DESC&#x60; (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['ordersGet'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGet200Response|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGet200Response|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
     public function ordersGet($aggregations = null, $filter = null, $limit = 50, $page_token = null, $query = null, $sort = null, string $contentType = self::contentTypes['ordersGet'][0])
     {
@@ -3474,17 +4428,17 @@ class DefaultApi
      * Query and/or filter orders.
      *
      * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[]|null $aggregations The statuses to retrieve counts for. (optional)
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter Filters on the orders. Examples: - &#x60;filter[assignedUserId]&#x3D;me&#x60; - &#x60;filter[carrier]&#x3D;POST_NL&#x60; - &#x60;filter[hasAssignedUser]&#x3D;true&#x60; - &#x60;filter[hasNotes]&#x3D;true&#x60; - &#x60;filter[orderedAt]&#x3D;gte 2024-02-04T00:00:00Z&#x60; - &#x60;filter[price]&#x3D;lte 10&#x60; - &#x60;filter[shopId]&#x3D;555&#x60; - &#x60;filter[status]&#x3D;OPEN&amp;filter[status]&#x3D;CANCELED&#x60; (optional)
      * @param  int|null $limit The maximum number of orders to retrieve. (optional, default to 50)
      * @param  string|null $page_token The page token to retrieve the next page of orders. (optional)
-     * @param  string|null $query The following operators are supported: &#39;+ signifies AND operation&#39; &#39;| signifies OR operation&#39; &#39;- negates a single token&#39; &#39;\&quot; wraps a number of tokens to signify a phrase for searching&#39; &#39;* at the end of a term signifies a prefix query&#39; &#39;( and ) signify precedence&#39; &#39;~N after a word signifies edit distance (fuzziness)&#39; &#39;~N after a phrase signifies slop amount&#39; To use one of these characters literally, escape it with a preceding backslash (\\). (optional)
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter|null $sort When no &#x60;query&#x60; is provided the default sort is by &#x60;orderedAt&#x60; descending. When a &#x60;query&#x60; is provided the default sort is by relevance. (optional)
+     * @param  string|null $query The following operators are supported: &#39;+ signifies AND operation&#39; &#39;| signifies OR operation&#39; &#39;- negates a single token&#39; &#39;\&quot; wraps a number of tokens to signify a phrase for searching&#39; &#39;* at the end of a term signifies a prefix query&#39; &#39;( and ) signify precedence&#39; &#39;~N after a word signifies edit distance (fuzziness)&#39; &#39;~N after a phrase signifies slop amount&#39; To use one of these characters literally, escape it with a preceding backslash (\\\\). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter|null $sort When no &#x60;query&#x60; is provided the default sort is by &#x60;orderedAt&#x60; descending. When a &#x60;query&#x60; is provided the default sort is by relevance. Examples: - &#x60;sort[orderedAt]&#x3D;ASC&#x60; - &#x60;sort[customerReference]&#x3D;ASC&amp;sort[orderedAt]&#x3D;DESC&amp;sort[price]&#x3D;ASC&amp;sort[sourceId]&#x3D;DESC&#x60; (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['ordersGet'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGet200Response|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGet200Response|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
     public function ordersGetWithHttpInfo($aggregations = null, $filter = null, $limit = 50, $page_token = null, $query = null, $sort = null, string $contentType = self::contentTypes['ordersGet'][0])
     {
@@ -3568,6 +4522,60 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -3629,6 +4637,22 @@ class DefaultApi
                     );
                     $e->setResponseObject($data);
                     break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
             }
             throw $e;
         }
@@ -3640,11 +4664,11 @@ class DefaultApi
      * Query and/or filter orders.
      *
      * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[]|null $aggregations The statuses to retrieve counts for. (optional)
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter Filters on the orders. Examples: - &#x60;filter[assignedUserId]&#x3D;me&#x60; - &#x60;filter[carrier]&#x3D;POST_NL&#x60; - &#x60;filter[hasAssignedUser]&#x3D;true&#x60; - &#x60;filter[hasNotes]&#x3D;true&#x60; - &#x60;filter[orderedAt]&#x3D;gte 2024-02-04T00:00:00Z&#x60; - &#x60;filter[price]&#x3D;lte 10&#x60; - &#x60;filter[shopId]&#x3D;555&#x60; - &#x60;filter[status]&#x3D;OPEN&amp;filter[status]&#x3D;CANCELED&#x60; (optional)
      * @param  int|null $limit The maximum number of orders to retrieve. (optional, default to 50)
      * @param  string|null $page_token The page token to retrieve the next page of orders. (optional)
-     * @param  string|null $query The following operators are supported: &#39;+ signifies AND operation&#39; &#39;| signifies OR operation&#39; &#39;- negates a single token&#39; &#39;\&quot; wraps a number of tokens to signify a phrase for searching&#39; &#39;* at the end of a term signifies a prefix query&#39; &#39;( and ) signify precedence&#39; &#39;~N after a word signifies edit distance (fuzziness)&#39; &#39;~N after a phrase signifies slop amount&#39; To use one of these characters literally, escape it with a preceding backslash (\\). (optional)
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter|null $sort When no &#x60;query&#x60; is provided the default sort is by &#x60;orderedAt&#x60; descending. When a &#x60;query&#x60; is provided the default sort is by relevance. (optional)
+     * @param  string|null $query The following operators are supported: &#39;+ signifies AND operation&#39; &#39;| signifies OR operation&#39; &#39;- negates a single token&#39; &#39;\&quot; wraps a number of tokens to signify a phrase for searching&#39; &#39;* at the end of a term signifies a prefix query&#39; &#39;( and ) signify precedence&#39; &#39;~N after a word signifies edit distance (fuzziness)&#39; &#39;~N after a phrase signifies slop amount&#39; To use one of these characters literally, escape it with a preceding backslash (\\\\). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter|null $sort When no &#x60;query&#x60; is provided the default sort is by &#x60;orderedAt&#x60; descending. When a &#x60;query&#x60; is provided the default sort is by relevance. Examples: - &#x60;sort[orderedAt]&#x3D;ASC&#x60; - &#x60;sort[customerReference]&#x3D;ASC&amp;sort[orderedAt]&#x3D;DESC&amp;sort[price]&#x3D;ASC&amp;sort[sourceId]&#x3D;DESC&#x60; (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['ordersGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
@@ -3667,11 +4691,11 @@ class DefaultApi
      * Query and/or filter orders.
      *
      * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[]|null $aggregations The statuses to retrieve counts for. (optional)
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter Filters on the orders. Examples: - &#x60;filter[assignedUserId]&#x3D;me&#x60; - &#x60;filter[carrier]&#x3D;POST_NL&#x60; - &#x60;filter[hasAssignedUser]&#x3D;true&#x60; - &#x60;filter[hasNotes]&#x3D;true&#x60; - &#x60;filter[orderedAt]&#x3D;gte 2024-02-04T00:00:00Z&#x60; - &#x60;filter[price]&#x3D;lte 10&#x60; - &#x60;filter[shopId]&#x3D;555&#x60; - &#x60;filter[status]&#x3D;OPEN&amp;filter[status]&#x3D;CANCELED&#x60; (optional)
      * @param  int|null $limit The maximum number of orders to retrieve. (optional, default to 50)
      * @param  string|null $page_token The page token to retrieve the next page of orders. (optional)
-     * @param  string|null $query The following operators are supported: &#39;+ signifies AND operation&#39; &#39;| signifies OR operation&#39; &#39;- negates a single token&#39; &#39;\&quot; wraps a number of tokens to signify a phrase for searching&#39; &#39;* at the end of a term signifies a prefix query&#39; &#39;( and ) signify precedence&#39; &#39;~N after a word signifies edit distance (fuzziness)&#39; &#39;~N after a phrase signifies slop amount&#39; To use one of these characters literally, escape it with a preceding backslash (\\). (optional)
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter|null $sort When no &#x60;query&#x60; is provided the default sort is by &#x60;orderedAt&#x60; descending. When a &#x60;query&#x60; is provided the default sort is by relevance. (optional)
+     * @param  string|null $query The following operators are supported: &#39;+ signifies AND operation&#39; &#39;| signifies OR operation&#39; &#39;- negates a single token&#39; &#39;\&quot; wraps a number of tokens to signify a phrase for searching&#39; &#39;* at the end of a term signifies a prefix query&#39; &#39;( and ) signify precedence&#39; &#39;~N after a word signifies edit distance (fuzziness)&#39; &#39;~N after a phrase signifies slop amount&#39; To use one of these characters literally, escape it with a preceding backslash (\\\\). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter|null $sort When no &#x60;query&#x60; is provided the default sort is by &#x60;orderedAt&#x60; descending. When a &#x60;query&#x60; is provided the default sort is by relevance. Examples: - &#x60;sort[orderedAt]&#x3D;ASC&#x60; - &#x60;sort[customerReference]&#x3D;ASC&amp;sort[orderedAt]&#x3D;DESC&amp;sort[price]&#x3D;ASC&amp;sort[sourceId]&#x3D;DESC&#x60; (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['ordersGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
@@ -3735,11 +4759,11 @@ class DefaultApi
      * Create request for operation 'ordersGet'
      *
      * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[]|null $aggregations The statuses to retrieve counts for. (optional)
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetFilterParameter|null $filter Filters on the orders. Examples: - &#x60;filter[assignedUserId]&#x3D;me&#x60; - &#x60;filter[carrier]&#x3D;POST_NL&#x60; - &#x60;filter[hasAssignedUser]&#x3D;true&#x60; - &#x60;filter[hasNotes]&#x3D;true&#x60; - &#x60;filter[orderedAt]&#x3D;gte 2024-02-04T00:00:00Z&#x60; - &#x60;filter[price]&#x3D;lte 10&#x60; - &#x60;filter[shopId]&#x3D;555&#x60; - &#x60;filter[status]&#x3D;OPEN&amp;filter[status]&#x3D;CANCELED&#x60; (optional)
      * @param  int|null $limit The maximum number of orders to retrieve. (optional, default to 50)
      * @param  string|null $page_token The page token to retrieve the next page of orders. (optional)
-     * @param  string|null $query The following operators are supported: &#39;+ signifies AND operation&#39; &#39;| signifies OR operation&#39; &#39;- negates a single token&#39; &#39;\&quot; wraps a number of tokens to signify a phrase for searching&#39; &#39;* at the end of a term signifies a prefix query&#39; &#39;( and ) signify precedence&#39; &#39;~N after a word signifies edit distance (fuzziness)&#39; &#39;~N after a phrase signifies slop amount&#39; To use one of these characters literally, escape it with a preceding backslash (\\). (optional)
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter|null $sort When no &#x60;query&#x60; is provided the default sort is by &#x60;orderedAt&#x60; descending. When a &#x60;query&#x60; is provided the default sort is by relevance. (optional)
+     * @param  string|null $query The following operators are supported: &#39;+ signifies AND operation&#39; &#39;| signifies OR operation&#39; &#39;- negates a single token&#39; &#39;\&quot; wraps a number of tokens to signify a phrase for searching&#39; &#39;* at the end of a term signifies a prefix query&#39; &#39;( and ) signify precedence&#39; &#39;~N after a word signifies edit distance (fuzziness)&#39; &#39;~N after a phrase signifies slop amount&#39; To use one of these characters literally, escape it with a preceding backslash (\\\\). (optional)
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrdersGetSortParameter|null $sort When no &#x60;query&#x60; is provided the default sort is by &#x60;orderedAt&#x60; descending. When a &#x60;query&#x60; is provided the default sort is by relevance. Examples: - &#x60;sort[orderedAt]&#x3D;ASC&#x60; - &#x60;sort[customerReference]&#x3D;ASC&amp;sort[orderedAt]&#x3D;DESC&amp;sort[price]&#x3D;ASC&amp;sort[sourceId]&#x3D;DESC&#x60; (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['ordersGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
@@ -3846,7 +4870,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -3899,24 +4923,964 @@ class DefaultApi
     }
 
     /**
+     * Operation packageGroupsPut
+     *
+     * Put package groups to orders
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PutPackageGroups[] $put_package_groups Body put package groups on orders (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packageGroupsPut'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
+     */
+    public function packageGroupsPut($put_package_groups, string $contentType = self::contentTypes['packageGroupsPut'][0])
+    {
+        list($response) = $this->packageGroupsPutWithHttpInfo($put_package_groups, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation packageGroupsPutWithHttpInfo
+     *
+     * Put package groups to orders
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PutPackageGroups[] $put_package_groups Body put package groups on orders (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packageGroupsPut'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function packageGroupsPutWithHttpInfo($put_package_groups, string $contentType = self::contentTypes['packageGroupsPut'][0])
+    {
+        $request = $this->packageGroupsPutRequest($put_package_groups, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            switch($statusCode) {
+                case 200:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 400:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation packageGroupsPutAsync
+     *
+     * Put package groups to orders
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PutPackageGroups[] $put_package_groups Body put package groups on orders (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packageGroupsPut'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function packageGroupsPutAsync($put_package_groups, string $contentType = self::contentTypes['packageGroupsPut'][0])
+    {
+        return $this->packageGroupsPutAsyncWithHttpInfo($put_package_groups, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation packageGroupsPutAsyncWithHttpInfo
+     *
+     * Put package groups to orders
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PutPackageGroups[] $put_package_groups Body put package groups on orders (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packageGroupsPut'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function packageGroupsPutAsyncWithHttpInfo($put_package_groups, string $contentType = self::contentTypes['packageGroupsPut'][0])
+    {
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]';
+        $request = $this->packageGroupsPutRequest($put_package_groups, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType, $request) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'packageGroupsPut'
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PutPackageGroups[] $put_package_groups Body put package groups on orders (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packageGroupsPut'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function packageGroupsPutRequest($put_package_groups, string $contentType = self::contentTypes['packageGroupsPut'][0])
+    {
+
+        // verify the required parameter 'put_package_groups' is set
+        if ($put_package_groups === null || (is_array($put_package_groups) && count($put_package_groups) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $put_package_groups when calling packageGroupsPut'
+            );
+        }
+        if (count($put_package_groups) > 50) {
+            throw new \InvalidArgumentException('invalid value for "$put_package_groups" when calling DefaultApi.packageGroupsPut, number of items must be less than or equal to 50.');
+        }
+        if (count($put_package_groups) < 1) {
+            throw new \InvalidArgumentException('invalid value for "$put_package_groups" when calling DefaultApi.packageGroupsPut, number of items must be greater than or equal to 1.');
+        }
+        
+
+        $resourcePath = '/package-groups';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', 'application/problem+json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($put_package_groups)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($put_package_groups), JSON_THROW_ON_ERROR);
+            } else {
+                $httpBody = $put_package_groups;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation packagesPut
+     *
+     * Put packages to orders
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PutPackages[] $put_packages Body put packages on orders (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packagesPut'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
+     */
+    public function packagesPut($put_packages, string $contentType = self::contentTypes['packagesPut'][0])
+    {
+        list($response) = $this->packagesPutWithHttpInfo($put_packages, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation packagesPutWithHttpInfo
+     *
+     * Put packages to orders
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PutPackages[] $put_packages Body put packages on orders (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packagesPut'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function packagesPutWithHttpInfo($put_packages, string $contentType = self::contentTypes['packagesPut'][0])
+    {
+        $request = $this->packagesPutRequest($put_packages, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            switch($statusCode) {
+                case 200:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 400:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation packagesPutAsync
+     *
+     * Put packages to orders
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PutPackages[] $put_packages Body put packages on orders (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packagesPut'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function packagesPutAsync($put_packages, string $contentType = self::contentTypes['packagesPut'][0])
+    {
+        return $this->packagesPutAsyncWithHttpInfo($put_packages, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation packagesPutAsyncWithHttpInfo
+     *
+     * Put packages to orders
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PutPackages[] $put_packages Body put packages on orders (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packagesPut'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function packagesPutAsyncWithHttpInfo($put_packages, string $contentType = self::contentTypes['packagesPut'][0])
+    {
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseAdditiveCollectionBodyInner[]';
+        $request = $this->packagesPutRequest($put_packages, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType, $request) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'packagesPut'
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PutPackages[] $put_packages Body put packages on orders (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packagesPut'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function packagesPutRequest($put_packages, string $contentType = self::contentTypes['packagesPut'][0])
+    {
+
+        // verify the required parameter 'put_packages' is set
+        if ($put_packages === null || (is_array($put_packages) && count($put_packages) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $put_packages when calling packagesPut'
+            );
+        }
+        if (count($put_packages) > 50) {
+            throw new \InvalidArgumentException('invalid value for "$put_packages" when calling DefaultApi.packagesPut, number of items must be less than or equal to 50.');
+        }
+        if (count($put_packages) < 1) {
+            throw new \InvalidArgumentException('invalid value for "$put_packages" when calling DefaultApi.packagesPut, number of items must be greater than or equal to 1.');
+        }
+        
+
+        $resourcePath = '/packages';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', 'application/problem+json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($put_packages)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($put_packages), JSON_THROW_ON_ERROR);
+            } else {
+                $httpBody = $put_packages;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation packingSlipsGet
      *
      * Generate packing slips for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the packing slips. A maximum of 50 orders can be included in the request. When packageId is provided, exactly one orderId is allowed. (required)
-     * @param  string $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. (required)
      * @param  string|null $shipment_labels_layout How shipment labels are included alongside the packing slips in the resulting PDF. &#x60;INTERLEAVED&#x60; outputs each packing slip immediately followed by its shipment label. When the parameter is omitted, no shipment labels are included and only packing slips are rendered. (optional)
      * @param  string[]|null $package_id The packageId of the package to include in the packing slips. The packageIds must belong to the single orderId in the request and a maximum of 20 packageIds can be included. (optional)
+     * @param  string|null $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. Without this header the packing slip is downloaded. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packingSlipsGet'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \SplFileObject|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \SplFileObject|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackingSlipsGet400Response|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsNotFound|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
-    public function packingSlipsGet($order_id, $accept, $shipment_labels_layout = null, $package_id = null, string $contentType = self::contentTypes['packingSlipsGet'][0])
+    public function packingSlipsGet($order_id, $shipment_labels_layout = null, $package_id = null, $accept = null, string $contentType = self::contentTypes['packingSlipsGet'][0])
     {
-        list($response) = $this->packingSlipsGetWithHttpInfo($order_id, $accept, $shipment_labels_layout, $package_id, $contentType);
+        list($response) = $this->packingSlipsGetWithHttpInfo($order_id, $shipment_labels_layout, $package_id, $accept, $contentType);
         return $response;
     }
 
@@ -3926,19 +5890,19 @@ class DefaultApi
      * Generate packing slips for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the packing slips. A maximum of 50 orders can be included in the request. When packageId is provided, exactly one orderId is allowed. (required)
-     * @param  string $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. (required)
      * @param  string|null $shipment_labels_layout How shipment labels are included alongside the packing slips in the resulting PDF. &#x60;INTERLEAVED&#x60; outputs each packing slip immediately followed by its shipment label. When the parameter is omitted, no shipment labels are included and only packing slips are rendered. (optional)
      * @param  string[]|null $package_id The packageId of the package to include in the packing slips. The packageIds must belong to the single orderId in the request and a maximum of 20 packageIds can be included. (optional)
+     * @param  string|null $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. Without this header the packing slip is downloaded. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packingSlipsGet'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \SplFileObject|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \SplFileObject|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackingSlipsGet400Response|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsNotFound|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
-    public function packingSlipsGetWithHttpInfo($order_id, $accept, $shipment_labels_layout = null, $package_id = null, string $contentType = self::contentTypes['packingSlipsGet'][0])
+    public function packingSlipsGetWithHttpInfo($order_id, $shipment_labels_layout = null, $package_id = null, $accept = null, string $contentType = self::contentTypes['packingSlipsGet'][0])
     {
-        $request = $this->packingSlipsGetRequest($order_id, $accept, $shipment_labels_layout, $package_id, $contentType);
+        $request = $this->packingSlipsGetRequest($order_id, $shipment_labels_layout, $package_id, $accept, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -3992,11 +5956,11 @@ class DefaultApi
                         $response->getHeaders()
                     ];
                 case 400:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackingSlipsGet400Response' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackingSlipsGet400Response' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -4014,7 +5978,88 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackingSlipsGet400Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 404:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsNotFound' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsNotFound' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsNotFound', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -4074,7 +6119,31 @@ class DefaultApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackingSlipsGet400Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsNotFound',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4090,18 +6159,18 @@ class DefaultApi
      * Generate packing slips for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the packing slips. A maximum of 50 orders can be included in the request. When packageId is provided, exactly one orderId is allowed. (required)
-     * @param  string $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. (required)
      * @param  string|null $shipment_labels_layout How shipment labels are included alongside the packing slips in the resulting PDF. &#x60;INTERLEAVED&#x60; outputs each packing slip immediately followed by its shipment label. When the parameter is omitted, no shipment labels are included and only packing slips are rendered. (optional)
      * @param  string[]|null $package_id The packageId of the package to include in the packing slips. The packageIds must belong to the single orderId in the request and a maximum of 20 packageIds can be included. (optional)
+     * @param  string|null $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. Without this header the packing slip is downloaded. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packingSlipsGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function packingSlipsGetAsync($order_id, $accept, $shipment_labels_layout = null, $package_id = null, string $contentType = self::contentTypes['packingSlipsGet'][0])
+    public function packingSlipsGetAsync($order_id, $shipment_labels_layout = null, $package_id = null, $accept = null, string $contentType = self::contentTypes['packingSlipsGet'][0])
     {
-        return $this->packingSlipsGetAsyncWithHttpInfo($order_id, $accept, $shipment_labels_layout, $package_id, $contentType)
+        return $this->packingSlipsGetAsyncWithHttpInfo($order_id, $shipment_labels_layout, $package_id, $accept, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -4115,19 +6184,19 @@ class DefaultApi
      * Generate packing slips for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the packing slips. A maximum of 50 orders can be included in the request. When packageId is provided, exactly one orderId is allowed. (required)
-     * @param  string $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. (required)
      * @param  string|null $shipment_labels_layout How shipment labels are included alongside the packing slips in the resulting PDF. &#x60;INTERLEAVED&#x60; outputs each packing slip immediately followed by its shipment label. When the parameter is omitted, no shipment labels are included and only packing slips are rendered. (optional)
      * @param  string[]|null $package_id The packageId of the package to include in the packing slips. The packageIds must belong to the single orderId in the request and a maximum of 20 packageIds can be included. (optional)
+     * @param  string|null $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. Without this header the packing slip is downloaded. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packingSlipsGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function packingSlipsGetAsyncWithHttpInfo($order_id, $accept, $shipment_labels_layout = null, $package_id = null, string $contentType = self::contentTypes['packingSlipsGet'][0])
+    public function packingSlipsGetAsyncWithHttpInfo($order_id, $shipment_labels_layout = null, $package_id = null, $accept = null, string $contentType = self::contentTypes['packingSlipsGet'][0])
     {
         $returnType = '\SplFileObject';
-        $request = $this->packingSlipsGetRequest($order_id, $accept, $shipment_labels_layout, $package_id, $contentType);
+        $request = $this->packingSlipsGetRequest($order_id, $shipment_labels_layout, $package_id, $accept, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -4181,16 +6250,16 @@ class DefaultApi
      * Create request for operation 'packingSlipsGet'
      *
      * @param  string[] $order_id The orderId of the order to include in the packing slips. A maximum of 50 orders can be included in the request. When packageId is provided, exactly one orderId is allowed. (required)
-     * @param  string $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. (required)
      * @param  string|null $shipment_labels_layout How shipment labels are included alongside the packing slips in the resulting PDF. &#x60;INTERLEAVED&#x60; outputs each packing slip immediately followed by its shipment label. When the parameter is omitted, no shipment labels are included and only packing slips are rendered. (optional)
      * @param  string[]|null $package_id The packageId of the package to include in the packing slips. The packageIds must belong to the single orderId in the request and a maximum of 20 packageIds can be included. (optional)
+     * @param  string|null $accept Use &#x60;application/pdf&#x60; to download the packing slip. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the packing slip directly to a printer group. Without this header the packing slip is downloaded. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['packingSlipsGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function packingSlipsGetRequest($order_id, $accept, $shipment_labels_layout = null, $package_id = null, string $contentType = self::contentTypes['packingSlipsGet'][0])
+    public function packingSlipsGetRequest($order_id, $shipment_labels_layout = null, $package_id = null, $accept = null, string $contentType = self::contentTypes['packingSlipsGet'][0])
     {
 
         // verify the required parameter 'order_id' is set
@@ -4206,13 +6275,6 @@ class DefaultApi
             throw new \InvalidArgumentException('invalid value for "$order_id" when calling DefaultApi.packingSlipsGet, number of items must be greater than or equal to 1.');
         }
         
-        // verify the required parameter 'accept' is set
-        if ($accept === null || (is_array($accept) && count($accept) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $accept when calling packingSlipsGet'
-            );
-        }
-
 
         if ($package_id !== null && count($package_id) > 20) {
             throw new \InvalidArgumentException('invalid value for "$package_id" when calling DefaultApi.packingSlipsGet, number of items must be less than or equal to 20.');
@@ -4221,6 +6283,7 @@ class DefaultApi
             throw new \InvalidArgumentException('invalid value for "$package_id" when calling DefaultApi.packingSlipsGet, number of items must be greater than or equal to 1.');
         }
         
+
 
         $resourcePath = '/packing-slips';
         $formParams = [];
@@ -4265,7 +6328,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/pdf', 'application/json', ],
+            ['application/pdf', 'application/problem+json', 'application/json', ],
             $contentType,
             $multipart
         );
@@ -4323,15 +6386,15 @@ class DefaultApi
      * Generate a picklist for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request. (required)
-     * @param  string $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. (required)
+     * @param  string|null $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. Without this header the picklist is downloaded. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['picklistGet'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \SplFileObject|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \SplFileObject|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackingSlipsGet400Response|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsNotFound|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
-    public function picklistGet($order_id, $accept, string $contentType = self::contentTypes['picklistGet'][0])
+    public function picklistGet($order_id, $accept = null, string $contentType = self::contentTypes['picklistGet'][0])
     {
         list($response) = $this->picklistGetWithHttpInfo($order_id, $accept, $contentType);
         return $response;
@@ -4343,15 +6406,15 @@ class DefaultApi
      * Generate a picklist for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request. (required)
-     * @param  string $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. (required)
+     * @param  string|null $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. Without this header the picklist is downloaded. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['picklistGet'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \SplFileObject|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \SplFileObject|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackingSlipsGet400Response|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsNotFound|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
-    public function picklistGetWithHttpInfo($order_id, $accept, string $contentType = self::contentTypes['picklistGet'][0])
+    public function picklistGetWithHttpInfo($order_id, $accept = null, string $contentType = self::contentTypes['picklistGet'][0])
     {
         $request = $this->picklistGetRequest($order_id, $accept, $contentType);
 
@@ -4407,11 +6470,11 @@ class DefaultApi
                         $response->getHeaders()
                     ];
                 case 400:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackingSlipsGet400Response' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackingSlipsGet400Response' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -4429,7 +6492,88 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackingSlipsGet400Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 404:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsNotFound' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsNotFound' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsNotFound', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -4489,7 +6633,31 @@ class DefaultApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackingSlipsGet400Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsNotFound',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4505,14 +6673,14 @@ class DefaultApi
      * Generate a picklist for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request. (required)
-     * @param  string $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. (required)
+     * @param  string|null $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. Without this header the picklist is downloaded. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['picklistGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function picklistGetAsync($order_id, $accept, string $contentType = self::contentTypes['picklistGet'][0])
+    public function picklistGetAsync($order_id, $accept = null, string $contentType = self::contentTypes['picklistGet'][0])
     {
         return $this->picklistGetAsyncWithHttpInfo($order_id, $accept, $contentType)
             ->then(
@@ -4528,14 +6696,14 @@ class DefaultApi
      * Generate a picklist for 1 or more orders.
      *
      * @param  string[] $order_id The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request. (required)
-     * @param  string $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. (required)
+     * @param  string|null $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. Without this header the picklist is downloaded. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['picklistGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @throws \JsonException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function picklistGetAsyncWithHttpInfo($order_id, $accept, string $contentType = self::contentTypes['picklistGet'][0])
+    public function picklistGetAsyncWithHttpInfo($order_id, $accept = null, string $contentType = self::contentTypes['picklistGet'][0])
     {
         $returnType = '\SplFileObject';
         $request = $this->picklistGetRequest($order_id, $accept, $contentType);
@@ -4592,14 +6760,14 @@ class DefaultApi
      * Create request for operation 'picklistGet'
      *
      * @param  string[] $order_id The orderId of the order to include in the picklist. A maximum of 50 orders can be included in the request. (required)
-     * @param  string $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. (required)
+     * @param  string|null $accept Use &#x60;application/pdf&#x60; to download the picklist. Use &#x60;application/pdf+print; printer-group-id&#x3D;&lt;uuid&gt;&#x60; to send the picklist directly to a printer group. Without this header the picklist is downloaded. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['picklistGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @throws \JsonException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function picklistGetRequest($order_id, $accept, string $contentType = self::contentTypes['picklistGet'][0])
+    public function picklistGetRequest($order_id, $accept = null, string $contentType = self::contentTypes['picklistGet'][0])
     {
 
         // verify the required parameter 'order_id' is set
@@ -4615,12 +6783,6 @@ class DefaultApi
             throw new \InvalidArgumentException('invalid value for "$order_id" when calling DefaultApi.picklistGet, number of items must be greater than or equal to 1.');
         }
         
-        // verify the required parameter 'accept' is set
-        if ($accept === null || (is_array($accept) && count($accept) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $accept when calling picklistGet'
-            );
-        }
 
 
         $resourcePath = '/picklist';
@@ -4648,7 +6810,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/pdf', 'application/json', ],
+            ['application/pdf', 'application/problem+json', 'application/json', ],
             $contentType,
             $multipart
         );
@@ -4711,7 +6873,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
     public function preparePackagesForShipmentPost($prepare_packages_for_shipment, string $contentType = self::contentTypes['preparePackagesForShipmentPost'][0])
     {
@@ -4730,7 +6892,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
     public function preparePackagesForShipmentPostWithHttpInfo($prepare_packages_for_shipment, string $contentType = self::contentTypes['preparePackagesForShipmentPost'][0])
     {
@@ -4761,11 +6923,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -4783,7 +6945,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -4814,6 +6976,87 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -4829,7 +7072,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -4862,7 +7105,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4871,6 +7114,30 @@ class DefaultApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4916,7 +7183,7 @@ class DefaultApi
      */
     public function preparePackagesForShipmentPostAsyncWithHttpInfo($prepare_packages_for_shipment, string $contentType = self::contentTypes['preparePackagesForShipmentPost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
         $request = $this->preparePackagesForShipmentPostRequest($prepare_packages_for_shipment, $contentType);
 
         return $this->client
@@ -5006,7 +7273,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -5076,7 +7343,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
     public function removeNotesPost($remove_notes_post_request_inner, string $contentType = self::contentTypes['removeNotesPost'][0])
     {
@@ -5095,7 +7362,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
     public function removeNotesPostWithHttpInfo($remove_notes_post_request_inner, string $contentType = self::contentTypes['removeNotesPost'][0])
     {
@@ -5126,11 +7393,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -5148,7 +7415,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -5179,6 +7446,87 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -5194,7 +7542,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -5227,7 +7575,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5236,6 +7584,30 @@ class DefaultApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5281,7 +7653,7 @@ class DefaultApi
      */
     public function removeNotesPostAsyncWithHttpInfo($remove_notes_post_request_inner, string $contentType = self::contentTypes['removeNotesPost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
         $request = $this->removeNotesPostRequest($remove_notes_post_request_inner, $contentType);
 
         return $this->client
@@ -5371,7 +7743,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -5431,36 +7803,40 @@ class DefaultApi
     }
 
     /**
-     * Operation unassignFromUserPost
+     * Operation shipPackagesPost
      *
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CancelPostRequestInner[] $cancel_post_request_inner Body for unassigning orders from an user. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['unassignFromUserPost'] to see the possible values for this operation
+     * Post ship packages
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipPackages[] $ship_packages Body ship packages (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['shipPackagesPost'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
-    public function unassignFromUserPost($cancel_post_request_inner, string $contentType = self::contentTypes['unassignFromUserPost'][0])
+    public function shipPackagesPost($ship_packages, string $contentType = self::contentTypes['shipPackagesPost'][0])
     {
-        list($response) = $this->unassignFromUserPostWithHttpInfo($cancel_post_request_inner, $contentType);
+        list($response) = $this->shipPackagesPostWithHttpInfo($ship_packages, $contentType);
         return $response;
     }
 
     /**
-     * Operation unassignFromUserPostWithHttpInfo
+     * Operation shipPackagesPostWithHttpInfo
      *
-     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CancelPostRequestInner[] $cancel_post_request_inner Body for unassigning orders from an user. (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['unassignFromUserPost'] to see the possible values for this operation
+     * Post ship packages
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipPackages[] $ship_packages Body ship packages (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['shipPackagesPost'] to see the possible values for this operation
      *
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
-    public function unassignFromUserPostWithHttpInfo($cancel_post_request_inner, string $contentType = self::contentTypes['unassignFromUserPost'][0])
+    public function shipPackagesPostWithHttpInfo($ship_packages, string $contentType = self::contentTypes['shipPackagesPost'][0])
     {
-        $request = $this->unassignFromUserPostRequest($cancel_post_request_inner, $contentType);
+        $request = $this->shipPackagesPostRequest($ship_packages, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -5487,11 +7863,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -5509,7 +7885,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -5540,6 +7916,87 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -5555,7 +8012,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -5588,7 +8045,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5597,6 +8054,496 @@ class DefaultApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation shipPackagesPostAsync
+     *
+     * Post ship packages
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipPackages[] $ship_packages Body ship packages (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['shipPackagesPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function shipPackagesPostAsync($ship_packages, string $contentType = self::contentTypes['shipPackagesPost'][0])
+    {
+        return $this->shipPackagesPostAsyncWithHttpInfo($ship_packages, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation shipPackagesPostAsyncWithHttpInfo
+     *
+     * Post ship packages
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipPackages[] $ship_packages Body ship packages (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['shipPackagesPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function shipPackagesPostAsyncWithHttpInfo($ship_packages, string $contentType = self::contentTypes['shipPackagesPost'][0])
+    {
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
+        $request = $this->shipPackagesPostRequest($ship_packages, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType, $request) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $response->getStatusCode(),
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'shipPackagesPost'
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipPackages[] $ship_packages Body ship packages (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['shipPackagesPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function shipPackagesPostRequest($ship_packages, string $contentType = self::contentTypes['shipPackagesPost'][0])
+    {
+
+        // verify the required parameter 'ship_packages' is set
+        if ($ship_packages === null || (is_array($ship_packages) && count($ship_packages) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $ship_packages when calling shipPackagesPost'
+            );
+        }
+        if (count($ship_packages) > 50) {
+            throw new \InvalidArgumentException('invalid value for "$ship_packages" when calling DefaultApi.shipPackagesPost, number of items must be less than or equal to 50.');
+        }
+        if (count($ship_packages) < 1) {
+            throw new \InvalidArgumentException('invalid value for "$ship_packages" when calling DefaultApi.shipPackagesPost, number of items must be greater than or equal to 1.');
+        }
+        
+
+        $resourcePath = '/ship-packages';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', 'application/problem+json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($ship_packages)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = json_encode(ObjectSerializer::sanitizeForSerialization($ship_packages), JSON_THROW_ON_ERROR);
+            } else {
+                $httpBody = $ship_packages;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = json_encode($formParams, JSON_THROW_ON_ERROR);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation unassignFromUserPost
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CancelPostRequestInner[] $cancel_post_request_inner Body for unassigning orders from an user. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['unassignFromUserPost'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
+     */
+    public function unassignFromUserPost($cancel_post_request_inner, string $contentType = self::contentTypes['unassignFromUserPost'][0])
+    {
+        list($response) = $this->unassignFromUserPostWithHttpInfo($cancel_post_request_inner, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation unassignFromUserPostWithHttpInfo
+     *
+     * @param  \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CancelPostRequestInner[] $cancel_post_request_inner Body for unassigning orders from an user. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['unassignFromUserPost'] to see the possible values for this operation
+     *
+     * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @throws \JsonException
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function unassignFromUserPostWithHttpInfo($cancel_post_request_inner, string $contentType = self::contentTypes['unassignFromUserPost'][0])
+    {
+        $request = $this->unassignFromUserPostRequest($cancel_post_request_inner, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            switch($statusCode) {
+                case 200:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 400:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5638,7 +8585,7 @@ class DefaultApi
      */
     public function unassignFromUserPostAsyncWithHttpInfo($cancel_post_request_inner, string $contentType = self::contentTypes['unassignFromUserPost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
         $request = $this->unassignFromUserPostRequest($cancel_post_request_inner, $contentType);
 
         return $this->client
@@ -5728,7 +8675,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );
@@ -5798,7 +8745,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError
      */
     public function unpreparePackagesForShipmentPost($unprepare_packages_for_shipment_post_request_inner, string $contentType = self::contentTypes['unpreparePackagesForShipmentPost'][0])
     {
@@ -5817,7 +8764,7 @@ class DefaultApi
      * @throws \MyParcelNL\Sdk\Client\Generated\OrderApi\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @throws \JsonException
-     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType|\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError, HTTP status code, HTTP response headers (array of strings)
      */
     public function unpreparePackagesForShipmentPostWithHttpInfo($unprepare_packages_for_shipment_post_request_inner, string $contentType = self::contentTypes['unpreparePackagesForShipmentPost'][0])
     {
@@ -5848,11 +8795,11 @@ class DefaultApi
 
             switch($statusCode) {
                 case 200:
-                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' === '\SplFileObject') {
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' === '\SplFileObject') {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
-                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]' !== 'string') {
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
                             } catch (\JsonException $exception) {
@@ -5870,7 +8817,7 @@ class DefaultApi
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]', []),
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -5901,6 +8848,87 @@ class DefaultApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 401:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 415:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
             }
 
             if ($statusCode < 200 || $statusCode > 299) {
@@ -5916,7 +8944,7 @@ class DefaultApi
                 );
             }
 
-            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+            $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
             if ($returnType === '\SplFileObject') {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
@@ -5949,7 +8977,7 @@ class DefaultApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]',
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -5958,6 +8986,30 @@ class DefaultApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInvalidRequestSyntax',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\UnauthorizedResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 415:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsUnsupportedMediaType',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ProblemDetailsInternalServerError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6003,7 +9055,7 @@ class DefaultApi
      */
     public function unpreparePackagesForShipmentPostAsyncWithHttpInfo($unprepare_packages_for_shipment_post_request_inner, string $contentType = self::contentTypes['unpreparePackagesForShipmentPost'][0])
     {
-        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\AssignToUserPost200ResponseInner[]';
+        $returnType = '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CommandResponseMutatingBodyInner[]';
         $request = $this->unpreparePackagesForShipmentPostRequest($unprepare_packages_for_shipment_post_request_inner, $contentType);
 
         return $this->client
@@ -6093,7 +9145,7 @@ class DefaultApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
+            ['application/json', 'application/problem+json', ],
             $contentType,
             $multipart
         );

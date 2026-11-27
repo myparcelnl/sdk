@@ -88,12 +88,13 @@ Class | Method | HTTP request | Description
 - [FulfilmentPlatform](docs/Model/FulfilmentPlatform.md)
 - [Platform](docs/Model/Platform.md)
 - [Principal](docs/Model/Principal.md)
-- [PrincipalCommon](docs/Model/PrincipalCommon.md)
 - [PrincipalShop](docs/Model/PrincipalShop.md)
 - [PrincipalType](docs/Model/PrincipalType.md)
 - [PrincipalUser](docs/Model/PrincipalUser.md)
+- [ProblemDetailsInternalServerError](docs/Model/ProblemDetailsInternalServerError.md)
 - [RoleShop](docs/Model/RoleShop.md)
 - [RoleUser](docs/Model/RoleUser.md)
+- [UnauthorizedResponse](docs/Model/UnauthorizedResponse.md)
 
 ## Authorization
 

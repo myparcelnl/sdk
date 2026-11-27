@@ -60,7 +60,7 @@ class CustomsDeclarationResponse implements ModelInterface, ArrayAccess, \JsonSe
     protected static $openAPITypes = [
         'groups' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponseGroupsInner[]',
         'purpose' => 'string',
-        'total_weight' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponseTotalWeight',
+        'total_weight' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationTotalWeight',
         'invoice_number' => 'string'
     ];
 
@@ -432,7 +432,7 @@ class CustomsDeclarationResponse implements ModelInterface, ArrayAccess, \JsonSe
     /**
      * Gets total_weight
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponseTotalWeight
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationTotalWeight
      */
     public function getTotalWeight()
     {
@@ -442,7 +442,7 @@ class CustomsDeclarationResponse implements ModelInterface, ArrayAccess, \JsonSe
     /**
      * Sets total_weight
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponseTotalWeight $total_weight total_weight
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationTotalWeight $total_weight total_weight
      *
      * @return self
      */

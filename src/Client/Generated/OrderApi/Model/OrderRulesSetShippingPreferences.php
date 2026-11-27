@@ -58,7 +58,7 @@ class OrderRulesSetShippingPreferences implements ModelInterface, ArrayAccess, \
       */
     protected static $openAPITypes = [
         'path' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderRulesSetShippingPreferencesPathInner[]',
-        'applied_at' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderRulesSetShippingPreferencesAppliedAt',
+        'applied_at' => '\DateTime',
         'result' => 'string'
     ];
 
@@ -71,7 +71,7 @@ class OrderRulesSetShippingPreferences implements ModelInterface, ArrayAccess, \
       */
     protected static $openAPIFormats = [
         'path' => null,
-        'applied_at' => null,
+        'applied_at' => 'date-time',
         'result' => null
     ];
 
@@ -313,6 +313,10 @@ class OrderRulesSetShippingPreferences implements ModelInterface, ArrayAccess, \
         if ($this->container['applied_at'] === null) {
             $invalidProperties[] = "'applied_at' can't be null";
         }
+        if (!is_null($this->container['applied_at']) && !preg_match("/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/", $this->container['applied_at'])) {
+            $invalidProperties[] = "invalid value for 'applied_at', must be conform to the pattern /^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/.";
+        }
+
         if ($this->container['result'] === null) {
             $invalidProperties[] = "'result' can't be null";
         }
@@ -377,7 +381,7 @@ class OrderRulesSetShippingPreferences implements ModelInterface, ArrayAccess, \
     /**
      * Gets applied_at
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderRulesSetShippingPreferencesAppliedAt
+     * @return \DateTime
      */
     public function getAppliedAt()
     {
@@ -387,7 +391,7 @@ class OrderRulesSetShippingPreferences implements ModelInterface, ArrayAccess, \
     /**
      * Sets applied_at
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderRulesSetShippingPreferencesAppliedAt $applied_at applied_at
+     * @param \DateTime $applied_at The date and time the rule was applied.
      *
      * @return self
      */
@@ -396,6 +400,11 @@ class OrderRulesSetShippingPreferences implements ModelInterface, ArrayAccess, \
         if (is_null($applied_at)) {
             throw new \InvalidArgumentException('non-nullable applied_at cannot be null');
         }
+
+        if ((!preg_match("/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/", ObjectSerializer::toString($applied_at)))) {
+            throw new \InvalidArgumentException("invalid value for \$applied_at when calling OrderRulesSetShippingPreferences., must conform to the pattern /^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$/.");
+        }
+
         $this->container['applied_at'] = $applied_at;
 
         return $this;

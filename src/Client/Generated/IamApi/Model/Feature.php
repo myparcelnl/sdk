@@ -79,6 +79,8 @@ class Feature
 
     public const SHIPMENT_BULK_EDITS = 'SHIPMENT_BULK_EDITS';
 
+    public const SHIPMENT_CUSTOM_SENDER = 'SHIPMENT_CUSTOM_SENDER';
+
     public const SHIPMENT_DISCOUNT = 'SHIPMENT_DISCOUNT';
 
     public const SHOP_LOGO_ON_PACKING_SLIP = 'SHOP_LOGO_ON_PACKING_SLIP';
@@ -122,6 +124,7 @@ class Feature
             self::SCAN_MODE,
             self::SHIPMENT_BULK_CREATE_FROM_ADDRESS_BOOK,
             self::SHIPMENT_BULK_EDITS,
+            self::SHIPMENT_CUSTOM_SENDER,
             self::SHIPMENT_DISCOUNT,
             self::SHOP_LOGO_ON_PACKING_SLIP,
             self::TIER1_ANALYTICS,

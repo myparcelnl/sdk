@@ -316,7 +316,7 @@ class PickupAnyOf2 implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets address
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address $address address
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Address $address The address of the pickup location.
      *
      * @return self
      */

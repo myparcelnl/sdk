@@ -35,7 +35,6 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  * CustomsDeclarationResponseGroupsInner Class Doc Comment
  *
  * @category Class
- * @description A consolidated group of items within a customs declaration that share common customs attributes.
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -61,9 +60,9 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
         'description' => 'string',
         'hs_code' => 'string',
         'number_of_items' => 'int',
-        'total_value' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationGroupsInnerTotalValue',
-        'total_weight' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponseGroupsInnerTotalWeight',
-        'country_code_of_origin' => 'StringMixed',
+        'total_value' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money',
+        'total_weight' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationGroupsInnerTotalWeight',
+        'country_code_of_origin' => 'string',
         'external_product_reference' => 'string'
     ];
 
@@ -356,6 +355,18 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
         if ($this->container['total_weight'] === null) {
             $invalidProperties[] = "'total_weight' can't be null";
         }
+        if (!is_null($this->container['country_code_of_origin']) && (mb_strlen($this->container['country_code_of_origin']) > 2)) {
+            $invalidProperties[] = "invalid value for 'country_code_of_origin', the character length must be smaller than or equal to 2.";
+        }
+
+        if (!is_null($this->container['country_code_of_origin']) && (mb_strlen($this->container['country_code_of_origin']) < 2)) {
+            $invalidProperties[] = "invalid value for 'country_code_of_origin', the character length must be bigger than or equal to 2.";
+        }
+
+        if (!is_null($this->container['country_code_of_origin']) && !preg_match("/[A-Z]{2}/", $this->container['country_code_of_origin'])) {
+            $invalidProperties[] = "invalid value for 'country_code_of_origin', must be conform to the pattern /[A-Z]{2}/.";
+        }
+
         if (!is_null($this->container['external_product_reference']) && (mb_strlen($this->container['external_product_reference']) > 64)) {
             $invalidProperties[] = "invalid value for 'external_product_reference', the character length must be smaller than or equal to 64.";
         }
@@ -485,7 +496,7 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
     /**
      * Gets total_value
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationGroupsInnerTotalValue
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money
      */
     public function getTotalValue()
     {
@@ -495,7 +506,7 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
     /**
      * Sets total_value
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationGroupsInnerTotalValue $total_value total_value
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Money $total_value The total declared value of all items within this group.
      *
      * @return self
      */
@@ -512,7 +523,7 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
     /**
      * Gets total_weight
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponseGroupsInnerTotalWeight
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationGroupsInnerTotalWeight
      */
     public function getTotalWeight()
     {
@@ -522,7 +533,7 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
     /**
      * Sets total_weight
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationResponseGroupsInnerTotalWeight $total_weight total_weight
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\CustomsDeclarationGroupsInnerTotalWeight $total_weight total_weight
      *
      * @return self
      */
@@ -539,7 +550,7 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
     /**
      * Gets country_code_of_origin
      *
-     * @return StringMixed|null
+     * @return string|null
      */
     public function getCountryCodeOfOrigin()
     {
@@ -549,7 +560,7 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
     /**
      * Sets country_code_of_origin
      *
-     * @param StringMixed|null $country_code_of_origin country_code_of_origin
+     * @param string|null $country_code_of_origin ISO 3166-1 alpha-2 country code.
      *
      * @return self
      */
@@ -558,6 +569,16 @@ class CustomsDeclarationResponseGroupsInner implements ModelInterface, ArrayAcce
         if (is_null($country_code_of_origin)) {
             throw new \InvalidArgumentException('non-nullable country_code_of_origin cannot be null');
         }
+        if ((mb_strlen($country_code_of_origin) > 2)) {
+            throw new \InvalidArgumentException('invalid length for $country_code_of_origin when calling CustomsDeclarationResponseGroupsInner., must be smaller than or equal to 2.');
+        }
+        if ((mb_strlen($country_code_of_origin) < 2)) {
+            throw new \InvalidArgumentException('invalid length for $country_code_of_origin when calling CustomsDeclarationResponseGroupsInner., must be bigger than or equal to 2.');
+        }
+        if ((!preg_match("/[A-Z]{2}/", ObjectSerializer::toString($country_code_of_origin)))) {
+            throw new \InvalidArgumentException("invalid value for \$country_code_of_origin when calling CustomsDeclarationResponseGroupsInner., must conform to the pattern /[A-Z]{2}/.");
+        }
+
         $this->container['country_code_of_origin'] = $country_code_of_origin;
 
         return $this;

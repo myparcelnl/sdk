@@ -63,13 +63,14 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerRecipient',
         'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerSender',
         'carrier_id' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrier',
-        'package_type' => 'float',
+        'package_type' => 'int',
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPhysicalPropertiesV2',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerOptions',
-        'delivery_type' => 'float',
-        'shipment_type' => 'float',
+        'delivery_type' => 'int',
+        'shipment_type' => 'int',
         'direction' => 'string',
-        'pickup' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerPickup'
+        'pickup' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInnerPickup',
+        'incoterms' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms'
     ];
 
     /**
@@ -91,7 +92,8 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
         'delivery_type' => null,
         'shipment_type' => null,
         'direction' => null,
-        'pickup' => null
+        'pickup' => null,
+        'incoterms' => null
     ];
 
     /**
@@ -111,7 +113,8 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
         'delivery_type' => false,
         'shipment_type' => false,
         'direction' => false,
-        'pickup' => false
+        'pickup' => false,
+        'incoterms' => false
     ];
 
     /**
@@ -211,7 +214,8 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
         'delivery_type' => 'delivery_type',
         'shipment_type' => 'shipment_type',
         'direction' => 'direction',
-        'pickup' => 'pickup'
+        'pickup' => 'pickup',
+        'incoterms' => 'incoterms'
     ];
 
     /**
@@ -231,7 +235,8 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
         'delivery_type' => 'setDeliveryType',
         'shipment_type' => 'setShipmentType',
         'direction' => 'setDirection',
-        'pickup' => 'setPickup'
+        'pickup' => 'setPickup',
+        'incoterms' => 'setIncoterms'
     ];
 
     /**
@@ -251,7 +256,8 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
         'delivery_type' => 'getDeliveryType',
         'shipment_type' => 'getShipmentType',
         'direction' => 'getDirection',
-        'pickup' => 'getPickup'
+        'pickup' => 'getPickup',
+        'incoterms' => 'getIncoterms'
     ];
 
     /**
@@ -417,6 +423,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
         $this->setIfExists('shipment_type', $data ?? [], null);
         $this->setIfExists('direction', $data ?? [], null);
         $this->setIfExists('pickup', $data ?? [], null);
+        $this->setIfExists('incoterms', $data ?? [], null);
     }
 
     /**
@@ -646,7 +653,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
     /**
      * Gets package_type
      *
-     * @return float|null
+     * @return int|null
      */
     public function getPackageType()
     {
@@ -656,7 +663,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
     /**
      * Sets package_type
      *
-     * @param float|null $package_type package_type
+     * @param int|null $package_type package_type
      *
      * @return self
      */
@@ -727,7 +734,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
     /**
      * Gets delivery_type
      *
-     * @return float|null
+     * @return int|null
      */
     public function getDeliveryType()
     {
@@ -737,7 +744,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
     /**
      * Sets delivery_type
      *
-     * @param float|null $delivery_type delivery_type
+     * @param int|null $delivery_type delivery_type
      *
      * @return self
      */
@@ -754,7 +761,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
     /**
      * Gets shipment_type
      *
-     * @return float|null
+     * @return int|null
      */
     public function getShipmentType()
     {
@@ -764,7 +771,7 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
     /**
      * Sets shipment_type
      *
-     * @param float|null $shipment_type shipment_type
+     * @param int|null $shipment_type shipment_type
      *
      * @return self
      */
@@ -828,6 +835,33 @@ class CapabilitiesPostCapabilitiesRequestV1DataCapabilitiesInner implements Mode
             throw new \InvalidArgumentException('non-nullable pickup cannot be null');
         }
         $this->container['pickup'] = $pickup;
+
+        return $this;
+    }
+
+    /**
+     * Gets incoterms
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms|null
+     */
+    public function getIncoterms()
+    {
+        return $this->container['incoterms'];
+    }
+
+    /**
+     * Sets incoterms
+     *
+     * @param \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentIncoterms|null $incoterms incoterms
+     *
+     * @return self
+     */
+    public function setIncoterms($incoterms)
+    {
+        if (is_null($incoterms)) {
+            throw new \InvalidArgumentException('non-nullable incoterms cannot be null');
+        }
+        $this->container['incoterms'] = $incoterms;
 
         return $this;
     }

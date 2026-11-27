@@ -455,8 +455,8 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
             $invalidProperties[] = "invalid value for 'assigned_user_id', number of items must be greater than or equal to 1.";
         }
 
-        if (!is_null($this->container['carrier']) && (count($this->container['carrier']) > 18)) {
-            $invalidProperties[] = "invalid value for 'carrier', number of items must be less than or equal to 18.";
+        if (!is_null($this->container['carrier']) && (count($this->container['carrier']) > 20)) {
+            $invalidProperties[] = "invalid value for 'carrier', number of items must be less than or equal to 20.";
         }
 
         if (!is_null($this->container['carrier']) && (count($this->container['carrier']) < 1)) {
@@ -612,7 +612,7 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets assigned_user_id
      *
-     * @param string[]|null $assigned_user_id assigned_user_id
+     * @param string[]|null $assigned_user_id The assigned user IDs to filter orders by.
      *
      * @return self
      */
@@ -646,7 +646,7 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets carrier
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Carrier[]|null $carrier carrier
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Carrier[]|null $carrier The carriers to filter orders by.
      *
      * @return self
      */
@@ -656,8 +656,8 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
             throw new \InvalidArgumentException('non-nullable carrier cannot be null');
         }
 
-        if ((count($carrier) > 18)) {
-            throw new \InvalidArgumentException('invalid value for $carrier when calling OrdersGetFilterParameter., number of items must be less than or equal to 18.');
+        if ((count($carrier) > 20)) {
+            throw new \InvalidArgumentException('invalid value for $carrier when calling OrdersGetFilterParameter., number of items must be less than or equal to 20.');
         }
         if ((count($carrier) < 1)) {
             throw new \InvalidArgumentException('invalid length for $carrier when calling OrdersGetFilterParameter., number of items must be greater than or equal to 1.');
@@ -734,7 +734,7 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets order_id
      *
-     * @param string[]|null $order_id order_id
+     * @param string[]|null $order_id The order IDs to filter orders by.
      *
      * @return self
      */
@@ -768,7 +768,7 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets ordered_at
      *
-     * @param string[]|null $ordered_at ordered_at
+     * @param string[]|null $ordered_at Range of the order's placed at datetime.
      *
      * @return self
      */
@@ -802,7 +802,7 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets package_status_group
      *
-     * @param string[]|null $package_status_group package_status_group
+     * @param string[]|null $package_status_group The status of a package to filter orders by.
      *
      * @return self
      */
@@ -836,7 +836,7 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets package_type
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageType[]|null $package_type package_type
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageType[]|null $package_type The type of a package to filter orders by.
      *
      * @return self
      */
@@ -870,7 +870,7 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets price
      *
-     * @param string[]|null $price price
+     * @param string[]|null $price Range of an order's price.
      *
      * @return self
      */
@@ -904,7 +904,7 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets region_code
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\RegionCode[]|null $region_code region_code
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\RegionCode[]|null $region_code The country codes to filter orders by.
      *
      * @return self
      */
@@ -938,7 +938,7 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets sales_channel_id
      *
-     * @param string[]|null $sales_channel_id sales_channel_id
+     * @param string[]|null $sales_channel_id The sales channel IDs to filter orders by.
      *
      * @return self
      */
@@ -999,7 +999,7 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets shipment_direction
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentDirection[]|null $shipment_direction shipment_direction
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentDirection[]|null $shipment_direction The direction of a package's shipment to filter orders by.
      *
      * @return self
      */
@@ -1033,7 +1033,7 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets shipment_payment_status
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PaymentStatus[]|null $shipment_payment_status shipment_payment_status
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PaymentStatus[]|null $shipment_payment_status The payment status of a shipment label associated with a package to filter orders by.
      *
      * @return self
      */
@@ -1067,7 +1067,7 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets shop_id
      *
-     * @param string[]|null $shop_id shop_id
+     * @param string[]|null $shop_id The shop IDs to filter orders by.
      *
      * @return self
      */
@@ -1101,7 +1101,7 @@ class OrdersGetFilterParameter implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets status
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[]|null $status status
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\OrderStatus[]|null $status The statuses to filter orders by.
      *
      * @return self
      */

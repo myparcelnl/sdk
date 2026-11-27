@@ -35,7 +35,6 @@ use \MyParcelNL\Sdk\Client\Generated\OrderApi\ObjectSerializer;
  * PhysicalPropertiesWeightRequired Class Doc Comment
  *
  * @category Class
- * @description The physical dimensions.
  * @package  MyParcelNL\Sdk\Client\Generated\OrderApi
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -60,7 +59,7 @@ class PhysicalPropertiesWeightRequired implements ModelInterface, ArrayAccess, \
     protected static $openAPITypes = [
         'height' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesHeight',
         'length' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesLength',
-        'weight' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequiredWeight',
+        'weight' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeight',
         'width' => '\MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWidth'
     ];
 
@@ -371,7 +370,7 @@ class PhysicalPropertiesWeightRequired implements ModelInterface, ArrayAccess, \
     /**
      * Gets weight
      *
-     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequiredWeight
+     * @return \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeight
      */
     public function getWeight()
     {
@@ -381,7 +380,7 @@ class PhysicalPropertiesWeightRequired implements ModelInterface, ArrayAccess, \
     /**
      * Sets weight
      *
-     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeightRequiredWeight $weight weight
+     * @param \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PhysicalPropertiesWeight $weight weight
      *
      * @return self
      */

@@ -64,7 +64,7 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
         'reference_identifier' => 'int',
         'recipient' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerRecipient',
         'sender' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentSender',
-        'recipients' => 'float[]',
+        'recipients' => 'int[]',
         'physical_properties' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsInnerPhysicalProperties',
         'options' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsShipmentOptions',
         'customs_declaration' => '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentCustomsDeclaration',
@@ -706,7 +706,7 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets recipients
      *
-     * @return float[]|null
+     * @return int[]|null
      */
     public function getRecipients()
     {
@@ -716,7 +716,7 @@ class ShipmentRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets recipients
      *
-     * @param float[]|null $recipients recipients
+     * @param int[]|null $recipients recipients
      *
      * @return self
      */
