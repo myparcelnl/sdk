@@ -123,41 +123,66 @@ See [UPGRADE.md](UPGRADE.md) for detailed before/after examples per service.
 
 `ConnectService` authorises a shop in the merchant's browser instead of taking an API key. It is for
 integrations you publish and other people install, rather than a single shop you run yourself.
-`EcommerceApiFactory` then builds an e-commerce client that signs every call, which is how orders
-are pushed.
+`EcommerceApiFactory` then builds the generated e-commerce client that signs every call, which is how
+orders are pushed.
 
-Connect covers one call for now, `POST /webhook/orders`. Every other service in this SDK still takes
-an API key.
+Connect covers the order push, `POST /webhook/orders`, and the product push,
+`POST /webhook/products`. Every other service in this SDK still takes an API key.
 
 See [PHP SDK v11] on the developer portal for how to use it. `dev/connect-poc` in this repository is
 a page that runs the whole flow.
 
 ### Pushing orders
 
-Every order needs a status: `Order::STATUS_OPEN` or `Order::STATUS_CANCELED`. The e-commerce service
-refuses the whole request with HTTP 400 when one order has no status.
+Every order needs a status: `OrderStatus::Open` or `OrderStatus::Canceled`. For an order without a
+status, the client throws a `ValidationException` and sends nothing.
 
 ```php
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\Order;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderStatus;
 use MyParcelNL\Sdk\Services\Ecommerce\EcommerceApiFactory;
+use MyParcelNL\Sdk\Services\Ecommerce\PushResultReader;
 
-$order = new Order([
-    'ordered_at' => new DateTime('now'),
-    'source_id'  => 'ORDER-2026-01042',
-    'status'     => Order::STATUS_OPEN,
-]);
+$order            = new Order();
+$order->orderedAt = new DateTimeImmutable('now');
+$order->sourceId  = 'ORDER-2026-01042';
+$order->status    = OrderStatus::Open;
 
-$api     = EcommerceApiFactory::make($connect);
-$results = $api->webhookOrdersPost([$order]);
+$api      = EcommerceApiFactory::make($connect);
+$response = $api->postWebhookOrder(requestBody: [$order]);
 ```
 
-To update an order, push it again with the same `source_id`. For example, when the merchant cancels
+MyParcel answers with one item per order. `PushResultReader` reads the answer into one `PushResult`
+per item:
+
+```php
+foreach ((new PushResultReader())->read($response) as $result) {
+    if (!$result->isAccepted()) {
+        // $result->getStatus(), $result->getTitle(), $result->getDetail() and
+        // $result->getErrors() say what MyParcel refused.
+    }
+}
+```
+
+An accepted order is not processed yet: MyParcel handles it later.
+
+The client checks an order against the spec before it sends it. For an order that does not match,
+it throws a `ValidationException` from `MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\Normalizer`.
+When MyParcel refuses the whole request, the client throws a generated exception, such as
+`PostWebhookOrderBadRequestException`.
+
+Pass the orders as a list, such as `array_values($orders)`: an array with the keys 0, 1, 2 and so on.
+For an empty array, and for an array without the key 0, the generated client sends the request
+without a body. For an array with a gap in its keys, it sends a JSON object and not a list. The
+client does not check how many orders the list holds. The spec allows 1 to 50.
+
+To update an order, push it again with the same `sourceId`. For example, when the merchant cancels
 the order in the shop:
 
 ```php
-$order->setStatus(Order::STATUS_CANCELED);
+$order->status = OrderStatus::Canceled;
 
-$results = $api->webhookOrdersPost([$order]);
+$response = $api->postWebhookOrder(requestBody: [$order]);
 ```
 
 MyParcel accepts the update, but does not act on it yet.

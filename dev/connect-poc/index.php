@@ -334,16 +334,15 @@ function receiveCallback(\MyParcelNL\Sdk\Services\Connect\ConnectService $connec
 /**
  * Call the e-commerce API once the shop is connected.
  *
- * EcommerceApiFactory::make() hands you the generated API client with the signing middleware
- * already on it. From there you call the endpoint and the SDK does the rest: it reads the stored
- * token, refreshes it when it is near expiry, signs the request with the shop's private key, and
- * retries once if MyParcel asks for a fresh nonce.
+ * `EcommerceApiFactory::make()` gives you the generated API client. From there you call the endpoint
+ * and the SDK does the rest: it reads the stored token, refreshes it when it is near expiry, signs
+ * the request with the private key of the shop, and sends the call once more with a fresh token
+ * when MyParcel answers 401.
  *
- * Building the order below is ordinary use of the generated models. The only thing worth copying is
- * the listInvalidProperties() check: the models carry the API's own rules, so you can catch a bad
- * field before you spend a request on it.
+ * The order below is ordinary use of the generated models. The models carry the rules of the API,
+ * so the client refuses a bad field with a `ValidationException` before it spends a request on it.
  *
- * Every order carries a status, Order::STATUS_OPEN or Order::STATUS_CANCELED. Push the same source
+ * Every order carries a status, `OrderStatus::Open` or `OrderStatus::Canceled`. Push the same source
  * id again to update an order, for example when the merchant cancels it in the shop.
  */
 function pushOrder(\MyParcelNL\Sdk\Services\Connect\ConnectService $connect): void
@@ -353,7 +352,7 @@ function pushOrder(\MyParcelNL\Sdk\Services\Connect\ConnectService $connect): vo
         'quantity'    => max(1, (int) ($_POST['quantity'] ?? 1)),
         'priceEuros'  => (string) ($_POST['priceEuros'] ?? '0'),
         'reference'   => trim((string) ($_POST['reference'] ?? '')),
-        'status'      => (string) ($_POST['status'] ?? \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order::STATUS_OPEN),
+        'status'      => (string) ($_POST['status'] ?? \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderStatus::Open->value),
     ];
 
     // Kept so the form comes back filled in the way the tester left it.
@@ -366,44 +365,56 @@ function pushOrder(\MyParcelNL\Sdk\Services\Connect\ConnectService $connect): vo
     $isUpdate = 'update' === ($_POST['mode'] ?? '') && isset($_SESSION['lastSourceId']);
     $sourceId = $isUpdate ? $_SESSION['lastSourceId'] : 'poc-' . bin2hex(random_bytes(4));
 
-    $order = new \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order([
-        'ordered_at'         => new \DateTime('now'),
-        'source_id'          => $sourceId,
-        // Sent as the form gives it: listInvalidProperties() below refuses a value outside the enum.
-        'status'             => $form['status'],
-        'customer_reference' => '' === $form['reference'] ? null : $form['reference'],
-        'lines'              => [
-            new \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\OrderLine([
-                'source_id' => $sourceId . '-1',
-                'quantity'  => $form['quantity'],
-                'product'   => new \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Product([
-                    'name'      => $form['productName'],
-                    'source_id' => 'poc-product-1',
-                ]),
-                'price' => new \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Money([
-                    'currency' => 'EUR',
-                    'micros'   => (int) round(((float) str_replace(',', '.', $form['priceEuros'])) * MICROS_PER_EURO),
-                ]),
-            ]),
-        ],
-    ]);
+    $product           = new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderLineProduct();
+    $product->name     = $form['productName'];
+    $product->sourceId = 'poc-product-1';
 
-    // The generated model checks the spec's own bounds, so a bad field is caught before the call.
-    $problems = $order->listInvalidProperties();
+    $price           = new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\Money();
+    $price->currency = 'EUR';
+    $price->micros   = (int) round(((float) str_replace(',', '.', $form['priceEuros'])) * MICROS_PER_EURO);
 
-    if ([] !== $problems) {
+    $line           = new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderLine();
+    $line->sourceId = $sourceId . '-1';
+    $line->quantity = $form['quantity'];
+    $line->product  = $product;
+    $line->price    = $price;
+
+    $order            = new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\Order();
+    $order->orderedAt = new \DateTimeImmutable('now');
+    $order->sourceId  = $sourceId;
+    // Sent as the form gives it: the client refuses a value that the spec does not have.
+    $order->status    = $form['status'];
+    $order->lines     = [$line];
+
+    if ('' !== $form['reference']) {
+        $order->customerReference = $form['reference'];
+    }
+
+    try {
+        // What goes out, for the page. This runs the same check as the call below.
+        $sent = (new \Symfony\Component\Serializer\Serializer([
+            new \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Normalizer\JaneObjectNormalizer(),
+        ]))->normalize($order, 'json');
+
+        // One call. Up to 50 orders per request, and MyParcel answers per order and not once for
+        // the batch, so read every item: some can be accepted while others are refused.
+        $response = \MyParcelNL\Sdk\Services\Ecommerce\EcommerceApiFactory::make($connect)
+            ->postWebhookOrder(requestBody: [$order]);
+    } catch (\MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\Normalizer\ValidationException $exception) {
+        $problems = [];
+
+        foreach ($exception->getViolationList() as $violation) {
+            $problems[] = trim($violation->getPropertyPath() . ' ' . $violation->getMessage());
+        }
+
         flash('error', 'The order does not match the spec', ['rejected because' => implode("\n", $problems)]);
 
         return;
     }
 
-    // One call. Up to 50 orders per request, and MyParcel answers per order rather than once for
-    // the batch, so read every item: some can be accepted while others are refused.
-    $results = \MyParcelNL\Sdk\Services\Ecommerce\EcommerceApiFactory::make($connect)
-        ->webhookOrdersPost([$order]);
-
-    $ok    = accepted($results);
-    $title = $isUpdate ? 'Order update' : 'Order';
+    $results = (new \MyParcelNL\Sdk\Services\Ecommerce\PushResultReader())->read($response);
+    $ok      = accepted($results);
+    $title   = $isUpdate ? 'Order update' : 'Order';
 
     // Only an accepted order can be updated.
     if ($ok) {
@@ -413,7 +424,7 @@ function pushOrder(\MyParcelNL\Sdk\Services\Connect\ConnectService $connect): vo
     flash($ok ? 'ok' : 'error', $title . ($ok ? ' accepted' : ' refused'), [
         'sourceId'    => $sourceId,
         'status'      => $form['status'],
-        'sent'        => json_encode($order->jsonSerialize(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
+        'sent'        => json_encode($sent, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
         'per item'    => describeResults($results),
     ]);
 }
@@ -421,16 +432,16 @@ function pushOrder(\MyParcelNL\Sdk\Services\Connect\ConnectService $connect): vo
 /**
  * Read whether every item in the answer came back accepted.
  *
- * @param mixed $results
+ * @param \MyParcelNL\Sdk\Services\Ecommerce\PushResult[] $results
  */
-function accepted($results): bool
+function accepted(array $results): bool
 {
-    if (!is_array($results) || [] === $results) {
+    if ([] === $results) {
         return false;
     }
 
     foreach ($results as $result) {
-        if (!is_object($result) || 202 !== (int) $result->getStatus()) {
+        if (!$result->isAccepted()) {
             return false;
         }
     }
@@ -439,29 +450,17 @@ function accepted($results): bool
 }
 
 /**
- * Say what happened per order, because /webhook/orders answers per item.
+ * Say what happened per order, because /webhook/orders answers per item. A call that MyParcel
+ * refuses as a whole, such as a 400 or a 404, throws and does not come here.
  *
- * @param  mixed $results
- * @return string
+ * @param \MyParcelNL\Sdk\Services\Ecommerce\PushResult[] $results
  */
-function describeResults($results): string
+function describeResults(array $results): string
 {
-    if (!is_array($results)) {
-        // A 400 or a 404 answers with one problem document instead of a list.
-        return is_object($results) ? trim(sprintf(
-            "%s %s\n%s",
-            (string) $results->getStatus(),
-            (string) $results->getTitle(),
-            (string) $results->getDetail()
-        )) : (string) json_encode($results);
-    }
-
     $lines = [];
 
     foreach ($results as $index => $result) {
-        $status = (int) $result->getStatus();
-
-        if (202 === $status) {
+        if ($result->isAccepted()) {
             $lines[] = sprintf('%d: 202 accepted', $index);
 
             continue;
@@ -470,13 +469,13 @@ function describeResults($results): string
         $lines[] = trim(sprintf(
             '%d: %d %s %s',
             $index,
-            $status,
+            (int) $result->getStatus(),
             (string) $result->getTitle(),
             (string) $result->getDetail()
         ));
 
-        foreach ((array) $result->getErrors() as $error) {
-            $lines[] = sprintf('    %s %s', (string) $error->getPointer(), (string) $error->getDetail());
+        foreach ($result->getErrors() as $error) {
+            $lines[] = sprintf('    %s %s', (string) ($error['pointer'] ?? ''), (string) ($error['detail'] ?? ''));
         }
     }
 
@@ -619,7 +618,7 @@ function render(
         'quantity'    => 1,
         'priceEuros'  => '24.95',
         'reference'   => 'PoC order',
-        'status'      => \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order::STATUS_OPEN,
+        'status'      => \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderStatus::Open->value,
     ];
     $lastSourceId = $_SESSION['lastSourceId'] ?? null;
 
@@ -697,9 +696,9 @@ function render(
     field('reference', 'Customer reference', (string) $form['reference'], 'text');
     echo '<label>Status<select name="status">';
 
-    // The values come from the generated model, so a new status appears after a regeneration.
-    foreach ((new \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\Order())->getStatusAllowableValues() as $status) {
-        printf('<option%s>%s</option>', $status === ($form['status'] ?? null) ? ' selected' : '', e($status));
+    // The values come from the generated enum, so a new status appears after a regeneration.
+    foreach (\MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\OrderStatus::cases() as $status) {
+        printf('<option%s>%s</option>', $status->value === ($form['status'] ?? null) ? ' selected' : '', e($status->value));
     }
 
     echo '</select></label>';

@@ -489,7 +489,7 @@ final class ConnectService
     /**
      * Build a DPoP proof for one outgoing API call.
      *
-     * @internal DpopMiddleware calls this, so the key never has to leave this class.
+     * @internal DpopAuthentication and DpopMiddleware call this, so the key never has to leave this class.
      * @param  string $htm         The method of the request.
      * @param  string $htu         The URL of the request, without query or fragment.
      * @param  string $accessToken The token going out in the same request.
