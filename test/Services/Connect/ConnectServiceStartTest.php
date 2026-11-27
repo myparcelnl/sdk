@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Connect;
 
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectStartConfig;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectStartConfig;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Normalizer\JaneObjectNormalizer;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\Normalizer\ValidationException;
 use MyParcelNL\Sdk\Exception\ConnectException;
 use MyParcelNL\Sdk\Model\Connect\ConnectConfig;
 use MyParcelNL\Sdk\Model\Connect\ConnectPlatform;
 use MyParcelNL\Sdk\Model\Connect\ConnectState;
 use MyParcelNL\Sdk\Services\Connect\ConnectService;
 use MyParcelNL\Sdk\Support\Str;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * start() and handleCallback(): everything that happens while the merchant is in a browser.
@@ -146,17 +149,17 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
     {
         $longest = 'https://shop.example.test/' . str_repeat('a', 250 - strlen('https://shop.example.test/'));
 
-        $config = static function (string $commandEndpoint): ConnectStartConfig {
-            return new ConnectStartConfig([
-                'platform'         => ConnectPlatform::SHOPIFY,
-                'shop_name'        => 'My Shop',
-                'shop_url'         => 'https://shop.example.test',
-                'command_endpoint' => $commandEndpoint,
+        $problems = static function (string $commandEndpoint): array {
+            return self::specProblems([
+                'platform'        => ConnectPlatform::SHOPIFY,
+                'shopName'        => 'My Shop',
+                'shopUrl'         => 'https://shop.example.test',
+                'commandEndpoint' => $commandEndpoint,
             ]);
         };
 
-        self::assertSame([], $config($longest)->listInvalidProperties(), 'the spec still allows our maximum');
-        self::assertNotSame([], $config($longest . 'a')->listInvalidProperties(), 'one over the limit');
+        self::assertSame([], $problems($longest), 'the spec still allows our maximum');
+        self::assertSame(['[commandEndpoint]'], $problems($longest . 'a'), 'one over the limit');
         self::assertNotSame('', $this->service()->start('My Shop', 'https://shop.example.test', null, $longest));
     }
 
@@ -216,19 +219,18 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
 
     public function testTheBoundsStartChecksAreTheOnesTheSpecDeclares(): void
     {
-        // start() checks the lengths itself, because the generated shop-name pattern is emitted
-        // without /u and refuses valid names. That leaves the bounds in two places, so this fails
-        // if a regenerated spec moves one out from under them.
+        // start() checks the lengths itself, with its own messages. That leaves the bounds in two
+        // places, so this fails if a regenerated spec moves one out from under them.
         $longestUrl = 'https://' . str_repeat('a', 128 - strlen('https://') - strlen('.test')) . '.test';
 
-        $atTheLimit = new ConnectStartConfig([
-            'platform'  => ConnectPlatform::SHOPIFY,
-            'shop_name' => str_repeat('a', 64),
-            'shop_url'  => $longestUrl,
-            'version'   => str_repeat('9', 256),
-        ]);
+        $atTheLimit = [
+            'platform' => ConnectPlatform::SHOPIFY,
+            'shopName' => str_repeat('a', 64),
+            'shopUrl'  => $longestUrl,
+            'version'  => str_repeat('9', 256),
+        ];
 
-        self::assertSame([], $atTheLimit->listInvalidProperties(), 'the spec still allows our maxima');
+        self::assertSame([], self::specProblems($atTheLimit), 'the spec still allows our maxima');
 
         // And start() accepts the same values, so neither side can shrink unnoticed.
         self::assertNotSame(
@@ -237,22 +239,48 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
         );
 
         $overTheLimit = [
-            'shop_name' => str_repeat('a', 65),
-            'shop_url'  => $longestUrl . 'a',
-            'version'   => str_repeat('9', 257),
+            'shopName' => str_repeat('a', 65),
+            'shopUrl'  => $longestUrl . 'a',
+            'version'  => str_repeat('9', 257),
         ];
 
         foreach ($overTheLimit as $field => $value) {
-            $config = new ConnectStartConfig([
-                'platform'  => ConnectPlatform::SHOPIFY,
-                'shop_name' => str_repeat('a', 64),
-                'shop_url'  => $longestUrl,
-                'version'   => str_repeat('9', 256),
-                $field      => $value,
-            ]);
-
-            self::assertNotSame([], $config->listInvalidProperties(), "$field one over the limit");
+            self::assertSame(
+                ["[$field]"],
+                self::specProblems([$field => $value] + $atTheLimit),
+                "$field one over the limit"
+            );
         }
+    }
+
+    /**
+     * The fields of a start config that the spec refuses, as the generated model reports them.
+     *
+     * @param  array<string, string> $fields
+     * @return string[]
+     */
+    private static function specProblems(array $fields): array
+    {
+        $config = new ConnectStartConfig();
+
+        foreach ($fields as $name => $value) {
+            $config->{$name} = $value;
+        }
+
+        try {
+            // The generated model checks a value against the spec when it goes out.
+            (new Serializer([new JaneObjectNormalizer()]))->normalize($config, 'json');
+        } catch (ValidationException $exception) {
+            $paths = [];
+
+            foreach ($exception->getViolationList() as $violation) {
+                $paths[] = $violation->getPropertyPath();
+            }
+
+            return array_values(array_unique($paths));
+        }
+
+        return [];
     }
 
     public function testStartStripsControlCharactersFromTheShopName(): void
@@ -365,7 +393,7 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
         // the reader looking in the wrong place.
         $this->expectExceptionMessage('it carried no nonce');
 
-        $this->service()->handleCallback(['code' => 'a-code', 'htm' => 'POST', 'htu' => self::HTU]);
+        $this->service()->handleCallback(['code' => self::CODE, 'htm' => 'POST', 'htu' => self::HTU]);
     }
 
     public function testCallbackAfterTheFlowIsGoneSaysSo(): void
@@ -379,7 +407,7 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
         $this->expectException(ConnectException::class);
         $this->expectExceptionMessage('this shop has no connect flow waiting');
 
-        $service->handleCallback(['nonce' => 'anything', 'code' => 'a-code', 'htm' => 'POST', 'htu' => self::HTU]);
+        $service->handleCallback(['nonce' => 'anything', 'code' => self::CODE, 'htm' => 'POST', 'htu' => self::HTU]);
     }
 
     public function testCallbackWithTheWrongNonceLeavesTheFlowAlone(): void
@@ -390,7 +418,7 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
         $stored = $this->storage->row('nonces')['startNonce'];
 
         try {
-            $service->handleCallback(['nonce' => 'not-it', 'code' => 'a-code', 'htm' => 'POST', 'htu' => self::HTU]);
+            $service->handleCallback(['nonce' => 'not-it', 'code' => self::CODE, 'htm' => 'POST', 'htu' => self::HTU]);
             self::fail('expected a ConnectException');
         } catch (ConnectException $exception) {
             self::assertSame($stored, $this->storage->row('nonces')['startNonce'], 'the flow survives');
@@ -411,7 +439,7 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
 
         $this->expectException(ConnectException::class);
 
-        $service->handleCallback(['nonce' => $nonce, 'code' => 'a-code', 'htm' => 'POST', 'htu' => self::HTU]);
+        $service->handleCallback(['nonce' => $nonce, 'code' => self::CODE, 'htm' => 'POST', 'htu' => self::HTU]);
     }
 
     public function testASuccessfulCallbackStoresEverythingTheShopNeeds(): void
@@ -567,7 +595,7 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
         try {
             $service->handleCallback([
                 'nonce' => $this->storage->row('nonces')['startNonce'],
-                'code'  => 'a-code',
+                'code'  => self::CODE,
                 'htm'   => $htm,
                 'htu'   => $htu,
             ]);
@@ -599,7 +627,7 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
         $state = $service->handleCallback([
             'nonce' => $this->storage->row('nonces')['startNonce'],
             'error' => '',
-            'code'  => 'a-code',
+            'code'  => self::CODE,
             'htm'   => 'POST',
             'htu'   => self::HTU,
         ]);
@@ -615,7 +643,7 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
 
         $this->expectException(ConnectException::class);
 
-        $service->handleCallback(['nonce' => ['x'], 'code' => 'a-code', 'htm' => 'POST', 'htu' => self::HTU]);
+        $service->handleCallback(['nonce' => ['x'], 'code' => self::CODE, 'htm' => 'POST', 'htu' => self::HTU]);
     }
 
     public function testStartCountsShopNameInCharactersNotBytes(): void
@@ -666,7 +694,7 @@ class ConnectServiceStartTest extends ConnectServiceTestCase
 
         return $service->handleCallback([
             'nonce' => $this->storage->row('nonces')['startNonce'],
-            'code'  => 'a-code',
+            'code'  => self::CODE,
             'htm'   => 'POST',
             'htu'   => self::HTU,
         ]);

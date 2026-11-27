@@ -8,6 +8,7 @@ use Exception;
 use Throwable;
 use MyParcelNL\Sdk\Model\Connect\ConnectCallbackError;
 use MyParcelNL\Sdk\Model\Connect\ConnectErrorCode;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Everything that can go wrong in MyParcel Connect.
@@ -182,8 +183,7 @@ class ConnectException extends Exception
      * DPoP-Nonce header off it.
      *
      * @param int                          $statusCode
-     * @param array<string, string[]>      $headers    As Guzzle reports them: one list of values
-     *                                                 per header, names in the wire's own casing.
+     * @param array<string, string[]>      $headers    One list of values per header.
      * @param array<string, mixed>|null    $body       The decoded response body.
      * @param \Throwable|null              $previous   What the HTTP layer raised. Its message names
      *                                                 the method, the URL and part of the body,
@@ -204,6 +204,35 @@ class ConnectException extends Exception
         $exception->responseBody    = $body;
 
         return $exception;
+    }
+
+    /**
+     * A call to MyParcel got an answer that is not a success. Reads the status, the headers and the
+     * body from the answer of the HTTP client.
+     *
+     * The SDK reads a failed connect call itself and does not use the generated exceptions for it.
+     * The generated client throws a `TypeError`, not an exception, for a 400 with the content type
+     * `application/json`, and that is the answer that carries `use_dpop_nonce` and `invalid_grant`.
+     *
+     * The header names are in lower case, as the Symfony HTTP client reports them: `dpop-nonce`.
+     *
+     * @todo janephp#1179: when the generated client throws its own exception for this answer, check
+     *       if `ConnectService` can use the generated exceptions for the connect calls.
+     *
+     * @param ResponseInterface $response The answer, with any status.
+     * @param \Throwable|null   $previous What failed while the SDK read the answer, if anything.
+     */
+    public static function fromResponse(ResponseInterface $response, ?Throwable $previous = null): self
+    {
+        // `false`: do not throw for a 4xx or a 5xx status. This method is here to read such an answer.
+        $body = json_decode($response->getContent(false), true);
+
+        return self::httpError(
+            $response->getStatusCode(),
+            $response->getHeaders(false),
+            is_array($body) ? $body : null,
+            $previous
+        );
     }
 
     /**

@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace MyParcelNL\Sdk\Services\Connect;
 
 use DateTimeImmutable;
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\HandlerStack;
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Api\DefaultApi;
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\ApiException;
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Configuration;
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectStartConfig;
-use MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\ConnectTokenPostRequest;
+use Jane\Component\OpenApiRuntime\Client\Plugin\ServerUrlHttpClient;
+use JsonException;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Client;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Endpoint\GetConnectStart;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Endpoint\PostConnectRefresh;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Endpoint\PostConnectToken;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectStartConfig;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Model\ConnectTokenPostBody;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Normalizer\JaneObjectNormalizer;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\Client\Endpoint;
+use MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\Normalizer\ValidationException;
 use MyParcelNL\Sdk\Concerns\HasUserAgent;
 use MyParcelNL\Sdk\Crypto\AesGcmCipher;
 use MyParcelNL\Sdk\Crypto\DpopKeyPair;
@@ -23,6 +26,10 @@ use MyParcelNL\Sdk\Model\Connect\ConnectErrorCode;
 use MyParcelNL\Sdk\Model\Connect\ConnectState;
 use MyParcelNL\Sdk\Model\Connect\ConnectTokenResponse;
 use MyParcelNL\Sdk\Support\Str;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
 
 /**
@@ -84,9 +91,10 @@ final class ConnectService
     private const DEFAULT_HTTP_TIMEOUT = 10;
 
     /**
-     * The response header MyParcel puts a fresh nonce in.
+     * The response header MyParcel puts a fresh nonce in: DPoP-Nonce. In lower case, because the
+     * HTTP client reports the names of response headers in lower case.
      */
-    private const NONCE_HEADER = 'DPoP-Nonce';
+    private const NONCE_HEADER = 'dpop-nonce';
 
     /**
      * Which of the two calls a failure came from.
@@ -108,9 +116,9 @@ final class ConnectService
     private $repository;
 
     /**
-     * @var \MyParcelNL\Sdk\Client\Generated\EcommerceApi\Api\DefaultApi
+     * @var \Symfony\Contracts\HttpClient\HttpClientInterface
      */
-    private $api;
+    private $http;
 
     /**
      * @var \MyParcelNL\Sdk\Crypto\DpopProofFactory
@@ -127,32 +135,25 @@ final class ConnectService
      *                                                 methods says where that record belongs and how
      *                                                 long to keep it. See
      *                                                 {@see ConnectStorageInterface}.
-     * @param ClientInterface|null        $http        The HTTP client the connect calls go out on.
+     * @param HttpClientInterface|null    $http        The HTTP client the connect calls go out on.
      *                                                 Pass one to set a proxy, a CA bundle or a
-     *                                                 timeout. Leave Guzzle's http_errors on: this
-     *                                                 reads a failure off the exception Guzzle
-     *                                                 raises, not off a returned response.
+     *                                                 timeout.
      * @throws \MyParcelNL\Sdk\Exception\ConnectException When this PHP cannot run Connect. See
      *                                                     {@see ConnectService::isSupported()}.
      */
     public function __construct(
         ConnectConfig $config,
         ConnectStorageInterface $storage,
-        ?ClientInterface $http = null
+        ?HttpClientInterface $http = null
     ) {
         self::assertIsSupported();
 
         $this->config = $config;
 
-        // No DpopMiddleware on the default client. /connect/token and /connect/refresh bind their
+        // No `DpopAuthentication` on this client. /connect/token and /connect/refresh bind their
         // proofs to the htm and htu stored at the callback, not to the URL being called, so a
-        // middleware that signs per request would sign the wrong thing.
-        $http = $http ?? new GuzzleClient([
-            'timeout' => self::DEFAULT_HTTP_TIMEOUT,
-            'handler' => HandlerStack::create(),
-        ]);
-
-        $this->api = new DefaultApi($http, (new Configuration())->setHost($config->getHost()));
+        // plugin that signs per request would sign the wrong thing.
+        $this->http = $http ?? HttpClient::create(['timeout' => self::DEFAULT_HTTP_TIMEOUT]);
 
         $this->proofs     = new DpopProofFactory();
         $this->repository = new ConnectStateRepository($storage, new AesGcmCipher($config->getEncryptionKey()));
@@ -197,24 +198,31 @@ final class ConnectService
         self::assertShopUrlAndVersion($shopUrl, $version);
         self::assertCommandEndpoint($commandEndpoint);
 
-        $fields = [
-            'platform'  => $this->config->getPlatform(),
-            'shop_name' => self::shopNameToSend($shopName),
-            'shop_url'  => $shopUrl,
-        ];
+        $config           = new ConnectStartConfig();
+        $config->platform = $this->config->getPlatform();
+        $config->shopName = self::shopNameToSend($shopName);
+        $config->shopUrl  = $shopUrl;
 
-        // The generated model sends a nullable field that is set to null, so leave it out instead.
         if (null !== $version) {
-            $fields['version'] = $version;
+            $config->version = $version;
         }
 
         if (null !== $commandEndpoint) {
-            $fields['command_endpoint'] = $commandEndpoint;
+            $config->commandEndpoint = $commandEndpoint;
         }
 
-        $config = new ConnectStartConfig($fields);
+        // The field names come from the spec. The bounds of the spec are checked above with the
+        // messages of this class, so the generated check is skipped here.
+        $fields = (new Serializer([new JaneObjectNormalizer()]))
+            ->normalize($config, 'json', ['skip_validation' => true]);
 
-        $json = json_encode($config, JSON_UNESCAPED_SLASHES);
+        // The generated model has the default 0.0.1 for the version. Leave the field out when the
+        // caller gave none, so MyParcel fills in its own default.
+        if (null === $version) {
+            unset($fields['version']);
+        }
+
+        $json = json_encode($fields, JSON_UNESCAPED_SLASHES);
 
         if (false === $json) {
             // json_encode() answers false for invalid UTF-8, which any latin1 shop title produces.
@@ -239,14 +247,16 @@ final class ConnectService
             $state->withStartNonce($nonce, time() + self::START_NONCE_LIFETIME, $commandEndpoint)
         );
 
-        // The path, the parameter names and the query encoding all come from the spec. It cannot
-        // refuse anything: the bounds it checks are the ones checked above.
-        return (string) $this->api->connectStartGetRequest(
-            $this->keyPair($state)->getThumbprint(),
-            $encoded,
-            $nonce,
-            $this->config->getScopeString()
-        )->getUri();
+        // The path, the parameter names and the query encoding all come from the generated endpoint.
+        // Nothing is sent: the browser of the merchant opens this URL.
+        $endpoint = new GetConnectStart(queryParameters: [
+            'jkt'    => $this->keyPair($state)->getThumbprint(),
+            'config' => $encoded,
+            'nonce'  => $nonce,
+            'scope'  => $this->config->getScopeString(),
+        ]);
+
+        return $this->config->getHost() . $endpoint->getUri() . '?' . $endpoint->getQueryString();
     }
 
     /**
@@ -513,40 +523,108 @@ final class ConnectService
     /**
      * Redeem the one-time code handleCallback() received for an access token.
      *
-     * @throws \MyParcelNL\Sdk\Client\Generated\EcommerceApi\ApiException
      * @throws \MyParcelNL\Sdk\Exception\ConnectException
      */
     private function exchangeCodeForToken(string $code, string $dpopProof): ConnectTokenResponse
     {
-        [$model, , $headers] = $this->api
-            ->connectTokenPostWithHttpInfo($dpopProof, new ConnectTokenPostRequest(['code' => $code]));
+        $body       = new ConnectTokenPostBody();
+        $body->code = $code;
 
-        return ConnectTokenResponse::fromExchange($model, self::nonceIn($headers));
+        try {
+            [$token, $nonce] = $this->call(
+                new PostConnectToken(requestBody: $body, headerParameters: ['dpop' => $dpopProof])
+            );
+        } catch (ValidationException $exception) {
+            // The generated client checks the code against the pattern of the spec before it sends
+            // it. MyParcel would refuse this code too, so the call is not made.
+            throw ConnectException::invalidCallback('its code does not have the form of a MyParcel code');
+        }
+
+        return ConnectTokenResponse::fromExchange($token, $nonce);
     }
 
     /**
      * Get a fresh access token for a shop that is already connected. No body and no Authorization
      * header: holding the key is the credential.
      *
-     * @throws \MyParcelNL\Sdk\Client\Generated\EcommerceApi\ApiException
      * @throws \MyParcelNL\Sdk\Exception\ConnectException
      */
     private function obtainFreshToken(string $dpopProof): ConnectTokenResponse
     {
-        [$model, , $headers] = $this->api->connectRefreshPostWithHttpInfo($dpopProof);
+        // The generated endpoint sends no Content-Type, because the call has no body. Without the
+        // header the service answers 415.
+        // @todo Remove the header when the service accepts a refresh without a Content-Type.
+        [$token, $nonce] = $this->call(
+            new PostConnectRefresh(headerParameters: ['dpop' => $dpopProof]),
+            ['Content-Type' => 'application/json']
+        );
 
-        return ConnectTokenResponse::fromRefresh($model, self::nonceIn($headers));
+        return ConnectTokenResponse::fromRefresh($token, $nonce);
+    }
+
+    /**
+     * Send one connect call, and give back the body of a 200 with the nonce that came with it.
+     *
+     * This reads the answer itself and does not use the generated exceptions: see
+     * `ConnectException::fromResponse()`.
+     *
+     * @param  Endpoint              $endpoint The generated endpoint: it supplies the method, the
+     *                                         path, the body and the DPoP header.
+     * @param  array<string, string> $headers  Headers that the generated endpoint does not send.
+     * @return array{0: array<string, mixed>, 1: string|null} The decoded body and the DPoP-Nonce.
+     * @throws \MyParcelNL\Sdk\Exception\ConnectException
+     * @throws \MyParcelNL\Sdk\Client\Generated\Jane\EcommerceApi\Runtime\Normalizer\ValidationException
+     *         When the body of the request does not match the spec.
+     */
+    private function call(Endpoint $endpoint, array $headers = []): array
+    {
+        // The client is built per call, not in the constructor: a consumer registers its plugin with
+        // `setUserAgentForProposition()` after the service exists.
+        $http = $this->http->withOptions([
+            'headers'       => ['User-Agent' => $this->getUserAgentHeader()] + $headers,
+            // A redirect would send the proof, and at /connect/token the code, to the URL in the
+            // Location header. A 3xx answer therefore comes back as it is, and becomes a
+            // `ConnectException`.
+            'max_redirects' => 0,
+        ]);
+
+        $client = Client::create(httpClient: (new ServerUrlHttpClient($this->config->getHost()))($http));
+
+        try {
+            $response = $client->executeRawEndpoint($endpoint);
+            $status   = $response->getStatusCode();
+            $content  = $response->getContent(false);
+        } catch (TransportExceptionInterface $exception) {
+            throw ConnectException::networkFailure($exception->getMessage());
+        }
+
+        if (200 !== $status) {
+            throw ConnectException::fromResponse($response);
+        }
+
+        try {
+            $body = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            // It did reach MyParcel, so the failure keeps the status and the headers of the answer.
+            throw ConnectException::fromResponse($response, $exception);
+        }
+
+        if (!is_array($body)) {
+            throw ConnectException::fromResponse($response);
+        }
+
+        return [$body, self::nonceIn($response->getHeaders(false))];
     }
 
     /**
      * The nonce MyParcel sent, if it sent one.
      *
-     * @param array<string, string[]> $headers
+     * @param array<string, string[]> $headers With the names in lower case.
      */
     private static function nonceIn(array $headers): ?string
     {
-        // The first value, never getHeaderLine()'s ", " joined list: that string is refused as a
-        // nonce every time, which would put the flow into a permanent retry loop.
+        // The first value, never a ", " joined list of a repeated header: that string is refused as
+        // a nonce every time, which would put the flow into a permanent retry loop.
         $value = $headers[self::NONCE_HEADER][0] ?? null;
 
         return null !== $value && '' !== $value ? $value : null;
@@ -577,7 +655,7 @@ final class ConnectService
         $key = $this->keyPair($state);
 
         try {
-            $token = $this->send($send, $this->proofs->createForTokenEndpoint($key, $htm, $htu, $state->getDpopNonce()));
+            $token = $send($this->proofs->createForTokenEndpoint($key, $htm, $htu, $state->getDpopNonce()));
         } catch (ConnectException $exception) {
             $nonce = self::nonceFrom($exception);
 
@@ -588,7 +666,7 @@ final class ConnectService
             $this->repository->saveDpopNonce($nonce);
 
             try {
-                $token = $this->send($send, $this->proofs->createForTokenEndpoint($key, $htm, $htu, $nonce));
+                $token = $send($this->proofs->createForTokenEndpoint($key, $htm, $htu, $nonce));
             } catch (ConnectException $retryFailure) {
                 if (null !== self::nonceFrom($retryFailure)) {
                     throw ConnectException::nonceRequired();
@@ -614,7 +692,7 @@ final class ConnectService
      * and any token the shop already has is still good. At the refresh it means MyParcel no longer
      * has the connection, so the token is cleared.
      *
-     * @param  ConnectException $exception The failure, already off the wire and converted.
+     * @param  ConnectException $exception The failure, as `call()` read it from the answer.
      * @param  string           $endpoint  ENDPOINT_EXCHANGE or ENDPOINT_REFRESH.
      */
     private function translate(ConnectException $exception, string $endpoint): ConnectException
@@ -654,45 +732,6 @@ final class ConnectService
 
         // The nonce travels in a header, never in the body.
         return self::nonceIn($exception->getResponseHeaders());
-    }
-
-    /**
-     * Make one call, so a generated exception never leaves this class.
-     *
-     * @param  callable $send Takes a proof, returns a ConnectTokenResponse.
-     * @throws \MyParcelNL\Sdk\Exception\ConnectException
-     */
-    private function send(callable $send, string $proof): ConnectTokenResponse
-    {
-        // Set per call, not in the constructor: a consumer registers its plugin with
-        // `setUserAgentForProposition()` after the service exists. Left alone, the generated client
-        // sends "OpenAPI-Generator/1.0.0/PHP".
-        $this->api->getConfig()->setUserAgent($this->getUserAgentHeader());
-
-        try {
-            return $send($proof);
-        } catch (ApiException $exception) {
-            throw self::asConnectException($exception);
-        }
-    }
-
-    /**
-     * Turn the generated client's exception into the one type this SDK throws.
-     */
-    private static function asConnectException(ApiException $exception): ConnectException
-    {
-        $headers = $exception->getResponseHeaders();
-
-        // The generated client leaves them null when no response arrived at all.
-        if (null === $headers) {
-            return ConnectException::networkFailure($exception->getMessage(), $exception);
-        }
-
-        $body = json_decode((string) $exception->getResponseBody(), true);
-
-        // The generated exception carries the method, the URL and part of the body in its message,
-        // which none of ours do, so it stays on the chain for whoever reads the log.
-        return ConnectException::httpError($exception->getCode(), $headers, is_array($body) ? $body : null, $exception);
     }
 
     /**
