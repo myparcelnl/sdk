@@ -170,6 +170,23 @@ $request->getUnsupportedOptions(); // ['tracked']
 This check validates option names accepted by the request model. It does not validate option
 values or determine which options a carrier offers.
 
+## Capabilities that the shipments endpoint does not have
+
+The capabilities API can return a value that this SDK version cannot send to the shipments endpoint,
+such as a new carrier. A shipment with that value fails when the request goes out.
+`SupportedCapabilitiesFilter::filter()` removes these carriers, delivery types, package types and
+options from a capabilities or contract definitions response, and returns copies. The services do not
+call it, so their responses stay complete.
+
+```php
+use MyParcelNL\Sdk\Services\Capabilities\SupportedCapabilitiesFilter;
+
+$definitions = SupportedCapabilitiesFilter::filter($service->getContractDefinitions());
+```
+
+To check one value, use `isCarrierSupported()`, `isDeliveryTypeSupported()`,
+`isPackageTypeSupported()` or `isOptionSupported()`.
+
 ## Storing a response
 
 `jsonSerialize()` throws on an enum value that this SDK version does not know, such as a new carrier
