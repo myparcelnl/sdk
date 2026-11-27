@@ -9,7 +9,7 @@ The PHP upgrade brings along some additional breaking changes to the SDK itself.
 
 ### The Jane clients
 
-v12 generates the clients of the Core API, the private Core API, the IAM API and the Order API with [Jane](https://github.com/janephp/janephp) instead of OpenAPI Generator. The rules in this table hold for every service, factory and model on a Jane client. The sections after it name only what differs from these rules.
+v12 generates the clients of the Core API, the private Core API, the IAM API, the Order API and the e-commerce API with [Jane](https://github.com/janephp/janephp) instead of OpenAPI Generator. The clients send their requests with the Symfony HTTP client. The SDK no longer requires `guzzlehttp/guzzle`, `psr/http-client` and `psr/http-message`: when your own code uses one of them, require it in your own `composer.json`. The rules in this table hold for every service, factory and model on a Jane client. The sections after it name only what differs from these rules.
 
 These services run on the Jane Core API client:
 
@@ -26,7 +26,7 @@ These services run on the Jane Core API client:
 
 `ApiKeyService` runs on the Jane IAM client, and `CapabilitiesService` sends its requests through `HttpCapabilitiesClient`. The rows about the constructor, the User-Agent and the API key do not hold for these two services: see their rows in the Services table.
 
-In this file, a class name that starts with `Jane\CoreApi` or `Jane\IamApi` is in `MyParcelNL\Sdk\Client\Generated\Jane`. A name that starts with `CoreApi` or `IamApi` is the v11 class in `MyParcelNL\Sdk\Client\Generated`, which v12 removes. `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` is a class of the Jane runtime, and `UnexpectedValueException` is the PHP class.
+In this file, a class name that starts with `Jane\CoreApi`, `Jane\IamApi` or `Jane\EcommerceApi` is in `MyParcelNL\Sdk\Client\Generated\Jane`. A name that starts with `CoreApi`, `IamApi` or `EcommerceApi` is the v11 class in `MyParcelNL\Sdk\Client\Generated`, which v12 removes. `Jane\Component\JsonSchemaRuntime\Exception\MalformedJsonException` is a class of the Jane runtime, and `UnexpectedValueException` is the PHP class.
 
 | Subject | v11 | v12 |
 |---------|-----|-----|
@@ -162,6 +162,9 @@ A shipment without a reference identifier gets one that starts with `sdk_`, as i
 |-------|-------------|
 | `MyParcelNL\Sdk\Model\Shipment\Shipment` and `ShipmentOptions` | The generated `Jane\CoreApi\Model\ShipmentPostShipmentsRequestV11DataShipmentsItem` and `ShipmentPostShipmentsRequestV11DataShipmentsItemOptions`, see [Creating shipments](#creating-shipments) |
 | `MyParcelNL\Sdk\Collection\ShipmentCollection` | An array of the generated shipment models |
+| `MyParcelNL\Sdk\Services\Connect\DpopMiddleware` | None. `EcommerceApiFactory::make()` builds a client that signs each call and sends a call once more after a 401 |
+| `MyParcelNL\Sdk\Client\Generated\EcommerceApi\Model\FixedWebhookOrderResult` | `PushResult`, from `PushResultReader::read()`. See [Order push](#order-push) |
+| `MyParcelNL\Sdk\Support\EnumFallback` | None. A Jane client keeps an enum value that the SDK does not know as the raw value, without a listener |
 | `MyParcelNL\Sdk\Services\Shipment\Concerns\EnsuresShipmentReferenceIds` | None. The services give a shipment without a reference identifier one that starts with `sdk_` |
 | `MyParcelNL\Sdk\Services\CoreApi\Concerns\ResolvesPostShipmentsContentType` | None. The generated client picks the content type of a shipment request from the request body |
 | `MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest` | The generated `Jane\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2`: pass it to `CapabilitiesService::get()`, or pass a shipment to `CapabilitiesService::fromShipment()`. It replaces the builder with `forCountry()`, the `with*()` methods and `getUnsupportedOptions()`, which took the option names of the SDK, such as `signature`, and snake_case keys, such as `country_code`. For an option name of the SDK, `ShipmentOptionMapper::v2PropertyFromName()` gives the property of the options model, such as `requiresSignature`, or `null` for an option that the request cannot send, such as `tracked` |
@@ -211,7 +214,7 @@ The spec limits an order to 100 lines and a product to 50 children. The client t
 ### Generated OpenAPI models
 
 > [!IMPORTANT]
-> v12 removes the OpenAPI Generator clients and models of the Core API, the private Core API, the IAM API and the Order API: `CoreApi`, `CoreApiPrivate`, `IamApi` and `OrderApi` in `MyParcelNL\Sdk\Client\Generated`. Use the services, or the Jane clients and models in `MyParcelNL\Sdk\Client\Generated\Jane`: `CoreApi\*` becomes `Jane\CoreApi\*`, `CoreApiPrivate\*` becomes `Jane\CoreApiPrivate\*`, `IamApi\*` becomes `Jane\IamApi\*`, and `OrderApi\Model\*` becomes `Jane\OrderApi\Model\*`. No service of the SDK uses the `Jane\OrderApi` client. The Jane models use public properties instead of getters and setters, and PHP enums instead of class constants.
+> v12 removes the OpenAPI Generator clients and models of the Core API, the private Core API, the IAM API, the Order API and the e-commerce API: `CoreApi`, `CoreApiPrivate`, `IamApi`, `OrderApi` and `EcommerceApi` in `MyParcelNL\Sdk\Client\Generated`. Use the services, or the Jane clients and models in `MyParcelNL\Sdk\Client\Generated\Jane`: `CoreApi\*` becomes `Jane\CoreApi\*`, `CoreApiPrivate\*` becomes `Jane\CoreApiPrivate\*`, `IamApi\*` becomes `Jane\IamApi\*`, `OrderApi\Model\*` becomes `Jane\OrderApi\Model\*`, and `EcommerceApi\*` becomes `Jane\EcommerceApi\*`. No service of the SDK uses the `Jane\OrderApi` client. The Jane models use public properties instead of getters and setters, and PHP enums instead of class constants.
 >
 > `CoreApi\Api\NotificationApi` and the `Notification*` models are removed without a replacement: the Jane Core API client has no notification methods.
 >
@@ -230,18 +233,6 @@ A Jane model has the same name as the old model when the old model came from a n
 | `CoreApi\Model\FixedShipmentRecipient`, and `FixedShipment` of the v12 betas | `Jane\CoreApi\Model\ShipmentDefsShipment` and `ShipmentDefsShipmentRecipient`. Jane reads every region and street that the spec allows, so the overrides are not needed |
 | `IamApi\Model\FixedPrincipal` | `Jane\IamApi\Model\PrincipalShop` or `PrincipalUser`, which `ApiKeyService::getPrincipal()` returns |
 
-#### The legacy e-commerce client
-
-The e-commerce client in `MyParcelNL\Sdk\Client\Generated\EcommerceApi` still comes from OpenAPI Generator. v12 generates it with openapi-generator 7.26.0 instead of 7.12.0:
-
-| Class with the change | v11 | v12 |
-|-----------------------|-----|-----|
-| `EcommerceApi\Api\DefaultApi` | A request method throws a `JsonException` when the body cannot be encoded as JSON | It throws an `InvalidArgumentException`. The `JsonException` is its previous exception. |
-| `EcommerceApi\Api\DefaultApi` | An `*Async()` method rejects the promise with an `ApiException` when the response is not valid JSON | The promise resolves with `null` |
-| `EcommerceApi\Model\PhysicalProperties` | `getHeight()`, `getLength()` and `getWidth()` return `PhysicalPropertiesHeight`, `PhysicalPropertiesLength` and `PhysicalPropertiesWidth` | They return `Dimension`, and the three classes are removed. Use the `UNIT_MM`, `UNIT_CM` and `UNIT_M` constants on `Dimension`. |
-
-`EnumFallback::setListener()` now gets only an unknown enum value of this client. The Jane clients keep an unknown value as the raw value, without a listener.
-
 ## Upgrading to v11.2
 
 v11.2 renames generated models in the Ecommerce client. Code that uses them must change.
@@ -254,7 +245,7 @@ v11.2 renames generated models in the Ecommerce client. Code that uses them must
 
 `EcommerceApi\Model\Product` still exists, but is now the body of `/webhook/products`. Code that builds order lines with it breaks. `unit` on height, length and width is now a plain string with these constants. The new `Dimension` model is generated, but `PhysicalProperties` does not use it.
 
-v12 replaces the three `PhysicalProperties*` classes with `Dimension`. See "The legacy e-commerce client" under "Upgrading to v12".
+v12 removes this client. See "Order push" and "Generated OpenAPI models" under "Upgrading to v12".
 
 ## Upgrading to v11
 

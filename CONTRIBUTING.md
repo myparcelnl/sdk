@@ -94,7 +94,6 @@ When calling methods from these generated clients, always use named arguments. P
 ### Generated Files Location
  **DO NOT EDIT MANUALLY**
 - `src/Client/Generated/Jane/`: the clients that [Jane](https://github.com/janephp/janephp) generates. Each API gets its own namespace, such as `MyParcelNL\Sdk\Client\Generated\Jane\CoreApi`.
-- `src/Client/Generated/EcommerceApi/`: the legacy e-commerce client that OpenAPI Generator generates. INT-2034 replaces it with the Jane `EcommerceApi`.
 
 Jane generates the following APIs:
 
@@ -104,10 +103,7 @@ Jane generates the following APIs:
 - IamApi: Identify and access management via the iam microservice.
 - OrderApi: To be phased out. API is not actually consumed - only some types are used in our plugins, but these should move to the new EcommerceApi.
 
-The configuration is in these files:
-
-- `.jane-openapi`: all Jane clients.
-- `openapi/ecommerce.yaml`, `openapi/common.yaml`, `openapi/commonProperties.yaml` and `openapi/templates/`: the legacy e-commerce client.
+The configuration is in `.jane-openapi`. `openapi/specs/` holds the specs that are not hosted.
 
 ### Regenerating Code
 
@@ -119,7 +115,7 @@ docker --version
 composer generate:api
 ```
 
-This command runs Jane for the Jane clients and OpenAPI Generator for the legacy e-commerce client. Then it refreshes the Composer autoloader. The `Regenerate API Client` workflow runs the same generators every Monday and opens a pull request with the changes.
+This command runs Jane in the `php` container of `docker-compose.yml`. Then it refreshes the Composer autoloader. The `Regenerate API Client` workflow runs Jane every Monday and opens a pull request with the changes.
 
 ### Notes for Development
 

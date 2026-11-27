@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Sdk\Test\Services\Connect;
 
-use GuzzleHttp\Psr7\Response;
+use MyParcelNL\Sdk\Test\Bootstrap\Http\Response;
 use MyParcelNL\Sdk\Exception\ConnectException;
 use MyParcelNL\Sdk\Services\Connect\ConnectService;
 use RuntimeException;

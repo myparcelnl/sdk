@@ -21,7 +21,6 @@
             "vendor/bin/phpunit --coverage-html coverage"
         ],
         "generate:api": [
-            "docker compose run --rm generate-api",
             "docker compose run --rm php composer generate:jane",
             "composer dump-autoload -o"
         ],
@@ -31,9 +30,6 @@
     },
     "require": {
         "php": "^8.3",
-        "guzzlehttp/guzzle": "^7.10",
-        "psr/http-client": "^1.0",
-        "psr/http-message": "^1.1 || ^2.0",
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.6",
         "jane-php/open-api-runtime": "^8.0",

@@ -193,7 +193,7 @@ final class TokenRefreshHttpClientTest extends ConnectServiceTestCase
      * The client under test, on a mock that answers in order and records what went out.
      *
      * @param \Symfony\Component\HttpClient\Response\MockResponse[] $answers        What the e-commerce host answers.
-     * @param \GuzzleHttp\Psr7\Response[]                           $connectAnswers What /connect/refresh answers.
+     * @param \MyParcelNL\Sdk\Test\Bootstrap\Http\Response[]                           $connectAnswers What /connect/refresh answers.
      */
     private function client(array $answers, array $connectAnswers = []): TokenRefreshHttpClient
     {
